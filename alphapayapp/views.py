@@ -149,3 +149,7 @@ def transfer_success_view(request, transfer_id):
     }
 
     return render(request, 'success.html', context)
+
+@login_required(login_url='login')
+def profile_view(request):
+    return render(request, 'profile.html')

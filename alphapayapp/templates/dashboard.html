@@ -1,30 +1,9 @@
+{% extends "base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - AlphaPay</title>
-    <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-</head>
-<body>
-    <header>
-        <div class="logo-container">
-            <img src="{% static 'images/logo_alphapay.png' %}" alt="Logo AlphaPay">
-            <h1>AlphaPay</h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">Início</a></li>
-                <li><a href="#">Transferências</a></li>
-                <li><a href="#">Investimentos</a></li>
-                <li><a href="#">Perfil</a></li>
-                <li><a href="{% url 'logout' %}">Sair</a></li>
-            </ul>
-        </nav>
-    </header>
+{% block title %}Dashboard | AlphaPay{% endblock %}
+{% block styles %} <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}"/> {% endblock %}
 
+{% block content %}
     <main>
         <section class="welcome">
             <h2>Olá, {{ user.first_name }}!</h2>
@@ -88,5 +67,4 @@
             </table>
         </section>
     </main>
-</body>
-</html>
+{% endblock %}
