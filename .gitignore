@@ -1,0 +1,49 @@
+# Ambiente virtual
+venv/
+
+# Arquivos Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Banco de dados SQLite
+
+# Configurações de IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Migrações (se quiser ignorar — mas geralmente se versiona)
+# Se quiser ignorar as migrações geradas:
+# **/migrations/
+# !**/migrations/__init__.py
+
+# Arquivos de log
+*.log
+
+# Cache do Django
+django_cache/
+
+# Arquivos de mídia e estáticos gerados
+/media/
+staticfiles/
+
+# Arquivos de teste e cobertura
+htmlcov/
+.coverage
+.coverage.*
+
+# Arquivos de build/distribuição
+dist/
+build/
+*.egg-info/
+
+# Arquivos temporários de editor/SO
+.DS_Store
+Thumbs.db
+
+*.sqlite3
+
+# Arquivos do pytest
+.pytest_cache/

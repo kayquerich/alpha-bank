@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transferência - AlphaPay</title>
+    <link rel="stylesheet" href="{% static 'styles/transferencia.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'images/logo_alphapay.png' %}" alt="Logo AlphaPay">
+            <h1>AlphaPay</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Início</a></li>
+                <li><a href="#">Transferências</a></li>
+                <li><a href="#">Investimentos</a></li>
+                <li><a href="#">Perfil</a></li>
+                <li><a href="{% url 'logout' %}">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="transfer-container">
+        <section class="account-info">
+            <h2>Informações da Conta</h2>
+            <div class="account-card">
+                <p><strong>Nome:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                <p><strong>Conta:</strong> {{ user_account.account_number }}</p>
+                <p><strong>Saldo:</strong> R$ {{ user_account.balance }}</p>
+            </div>
+        </section>
+
+        <section class="transfer-section">
+            <h2>Realizar Transferência</h2>
+            <form method="POST" class="transfer-form">
+                {% csrf_token %}
+                {% if error %}
+                    <p style="color:red">{{ error }}</p>
+                {% endif %}
+                <div class="form-group">
+                    <label for="destino">Número da Conta de Destino</label>
+                    <input type="text" id="reciver_account_number" name="reciver_account_number" placeholder="Ex: 12345" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="valor">Valor da Transferência</label>
+                    <input type="number" id="valor" name="amount" step="0.01" min="0.01" placeholder="Ex: 250.00" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao">Descrição (opcional)</label>
+                    <textarea id="descricao" name="description" placeholder="Motivo da transferência..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-transfer">
+                    <i class="fa-solid fa-money-bill-transfer"></i> Enviar Transferência
+                </button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

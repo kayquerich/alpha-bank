@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0a1a2f, #112e4a);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+/* HEADER */
+header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-container img {
+    height: 40px;
+}
+
+.logo-container h1 {
+    font-size: 1.5rem;
+    color: white;
+    letter-spacing: 1px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #00d4ff;
+}
+
+/* SUCCESS PAGE */
+.transferencia-container {
+    width: 100%;
+    max-width: 700px;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+}
+
+.info-conta h2 {
+    color: #185adb;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.success-text {
+    text-align: center;
+    color: #29cc7a;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.detalhes-transferencia h3 {
+    color: #185adb;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+.detalhes-transferencia p {
+    font-size: 1rem;
+    margin: 8px 0;
+}
+
+.data-transferencia {
+    color: #a0aec0;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+}
+
+.botoes {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.btn {
+    background: #185adb;
+    color: #fff;
+    padding: 0.8rem 1.6rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: 0.3s ease;
+    font-weight: 500;
+}
+
+.btn:hover {
+    background: #0f4cc9;
+}
+
+.btn-secundario {
+    background: transparent;
+    border: 2px solid #185adb;
+}
+
+.btn-secundario:hover {
+    background: #185adb;
+    color: #fff;
+}
