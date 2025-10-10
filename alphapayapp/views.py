@@ -152,4 +152,14 @@ def transfer_success_view(request, transfer_id):
 
 @login_required(login_url='login')
 def profile_view(request):
-    return render(request, 'profile.html')
+
+    auth_user = request.user
+    client_user = UserModel.User.objects.get(email=auth_user.email)
+    account = Client.objects.get(user=client_user)
+
+    context = {
+        'user': client_user,
+        'account': account,
+    }
+
+    return render(request, 'profile.html', context)

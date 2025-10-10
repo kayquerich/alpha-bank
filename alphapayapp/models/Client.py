@@ -9,6 +9,7 @@ class Client(models.Model):
     account_number = models.CharField(max_length=5, unique=True)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     created_at = models.DateTimeField(auto_now_add=True)
+    last_att = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
 

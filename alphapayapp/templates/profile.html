@@ -1,31 +1,38 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile | AlphaPay</title>
-    <link rel="stylesheet" href="{% static 'styles/profile.css' %}">
-</head>
-<body>
-    
-    <header>
-        <div class="logo-container">
-            <img src="{% static 'images/logo_alphapay.png' %}" alt="Logo AlphaPay">
-            <h1>AlphaPay</h1>
+{% block title %} Profile | AlphaPay {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'styles/profile.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="perfil-container">
+    <h2 class="titulo">Perfil do Usuário</h2>
+
+    <div class="cards-container">
+        <div class="card perfil-info">
+            <h3>Informações Pessoais</h3>
+            <p><strong>Nome:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+            <p><strong>CPF:</strong> {{ user.cpf }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Conta:</strong> {{ account.account_number }}</p>
+            <p><strong>Data de criação:</strong> {{ user.created_at|date:"d/m/Y" }}</p>
+            <p><strong>Endereço:</strong> {{ account.address }}</p>
+            <p><strong>Telefone:</strong> {{ account.phone_number }}</p>
         </div>
-        <nav>
-            <ul>
-                <li><a href="{% url 'dashboard' %}">Início</a></li>
-                <li><a href="#">Transferências</a></li>
-                <li><a href="#">Investimentos</a></li>
-                <li><a href="{% url 'profile' %}">Perfil</a></li>
-                <li><a href="{% url 'logout' %}">Sair</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    
+        <div class="card saldo-info">
+            <h3>Saldo Atual</h3>
+            <p class="saldo">R$ {{ account.balance|floatformat:2 }}</p>
+            <p class="atualizacao">Última atualização: {{ account.last_att|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
 
-</body>
-</html>
+    <div class="acoes" style="height: 300px;" >
+        <h3>Configurações da Conta</h3>
+        <div class="botoes">
+            <a href="#" class="btn">Editar Perfil</a>
+            <a href="#" class="btn btn-secundario">Alterar Senha</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
