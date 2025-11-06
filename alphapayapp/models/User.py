@@ -11,7 +11,7 @@ class User(models.Model):
     last_name = models.CharField(max_length=254)
     email = models.EmailField(max_length=254, unique=True)
     password = models.CharField(max_length=254)
-    cpf = models.CharField(max_length=11, unique=True)
+    cpf = models.CharField(max_length=14, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -39,8 +39,3 @@ def create_auth_user(sender, instance, created, **kwargs):
         )
         django_user.password = instance.password
         django_user.save()
-
-@receiver(post_save, sender=User)
-def create_client_profile(sender, instance, created, **kwargs):
-    if created:
-        Client.objects.create(user=instance)

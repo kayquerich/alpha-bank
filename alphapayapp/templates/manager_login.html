@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Gerencial | AlphaPay</title>
+    <link rel="stylesheet" href="{% static 'styles/manager_login.css' %}">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="{% static 'images/logo_alphapay.png' %}" alt="Logo AlphaPay">
+            <h1>AlphaPay Manager</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <h2>Área do Gerente</h2>
+            <p class="admin-text">Acesso restrito a administradores</p>
+            <form method="POST">
+                {% csrf_token %}
+                {% if error %}
+                    <p class="error-message">{{ error }}</p>
+                {% endif %}
+                <div>
+                    <label for="email">E-mail Corporativo</label>
+                    <input type="email" id="email" name="email" placeholder="seu.nome@alphapay.com" required>
+                </div>
+
+                <div>
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="password" placeholder="Digite sua senha" required>
+                </div>
+
+                <div class="security-code">
+                    <label for="code">Código de Segurança</label>
+                    <input type="text" id="code" name="security_code" placeholder="Digite o código de 6 dígitos" maxlength="6" required>
+                </div>
+
+                <button type="submit" class="button">Acessar Sistema</button>
+            </form>
+            <p class="footer-text">Área exclusiva para gerentes. <a href="{% url 'login' %}">Voltar para login de cliente</a></p>
+        </div>
+    </main>
+</body>
+</html>

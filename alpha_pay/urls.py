@@ -12,4 +12,5 @@ urlpatterns = [
     path('transfer/', transfer_view, name='transfer'),
     path('success/<int:transfer_id>/', transfer_success_view, name='success'),
     path('profile/', profile_view, name='profile'),
+    path('managerlogin/', manage_login_view, name='managerlogin'),
 ]

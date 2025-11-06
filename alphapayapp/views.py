@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from alphapayapp.models.Client import Client
 from alphapayapp.models.Transfer import Transfer
+from alphapayapp.models.Manager import Manager
 
 # Create your views here.
 
@@ -28,13 +29,20 @@ def cadastro_view(request):
         cpf = request.POST.get('cpf')
         
         try: 
-            UserModel.User.objects.create(
+            user = UserModel.User.objects.create(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
                 password=password,
                 cpf=cpf
             )
+            
+            client = Client.objects.create(
+                user=user,
+                balance=0.00
+            )
+            
+            print(f"Criado usuário {user.email} com conta número {client.account_number}")
 
             return redirect('login')
         except Exception as e:
@@ -163,3 +171,24 @@ def profile_view(request):
     }
 
     return render(request, 'profile.html', context)
+
+def manage_login_view(request): 
+
+    if request.method == 'POST':
+
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        security_code = request.POST.get('security_code')
+
+        user = authenticate(request, username=email, password=password)
+
+        if user is not None:
+            manager = Manager.objects.filter(security_code=security_code).first()
+            if manager:
+                login(request, user)
+                print(f"Manager {email} logged in.")
+                return render(request, 'manager_login.html')
+            else:
+                return render(request, 'manager_login.html', {'error': 'Código de segurança inválido.'})
+
+    return render(request, 'manager_login.html')
