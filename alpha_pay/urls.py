@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path
-from alphapayapp.views import *
+from alphapayapp.views.client_view import *
+from alphapayapp.views.manager_views import *
+from alphapayapp.views.teste_views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
