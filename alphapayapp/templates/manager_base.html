@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AlphaPay Manager{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'styles/manager_base.css' %}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <header class="manager-header">
+        <div class="logo-container">
+            <img src="{% static 'images/logo_alphapay.png' %}" alt="Logo AlphaPay">
+            <h1>AlphaPay Manager</h1>
+        </div>
+        <div class="header-actions">
+            {% if manager %}
+                <p class="manager-name">{{ manager.user.first_name }} {{ manager.user.last_name }}</p>
+                <a href="{% url 'logout' %}" class="logout-btn">Sair</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <nav class="manager-nav">
+        <ul>
+            <li><a href="{% url 'manager_dashboard' %}" class="nav-link">Dashboard</a></li>
+            <li><a href="#" class="nav-link">Relatórios</a></li>
+            <li><a href="#" class="nav-link">Configurações</a></li>
+        </ul>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer class="manager-footer">
+        <p>&copy; 2025 AlphaPay. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

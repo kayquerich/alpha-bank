@@ -1,9 +1,10 @@
 from django.db import models
 import random
+from alphapayapp.models.User import User
 
 class Manager(models.Model):
 
-    user = models.OneToOneField('alphapayapp.User', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     security_code = models.CharField(max_length=6, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_att = models.DateTimeField(auto_now=True)

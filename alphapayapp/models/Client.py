@@ -1,9 +1,12 @@
 from django.db import models
 import random
+from alphapayapp.models.User import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 class Client(models.Model):
 
-    user = models.OneToOneField('alphapayapp.User', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=254)
     phone_number = models.CharField(max_length=15)
     account_number = models.CharField(max_length=5, unique=True)
@@ -20,3 +23,21 @@ class Client(models.Model):
 
     def __str__(self):
         return f"Client_Account: {self.user.email} - {self.user.cpf}"
+    
+@receiver(post_save, sender=Client)
+def associate_manager (sender, instance, created, **kwargs):
+
+    from alphapayapp.models.Manager import Manager
+    from alphapayapp.models.Management import Management
+
+    if created:
+
+        managers = list(Manager.objects.all())
+        
+        if managers:
+            random_manager = random.choice(managers)
+            
+            Management.objects.create(
+                manager=random_manager,
+                client=instance
+            )

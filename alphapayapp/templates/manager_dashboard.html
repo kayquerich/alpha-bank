@@ -1,0 +1,40 @@
+{% extends 'manager_base.html' %}
+{% load static %}
+
+{% block title %}Painel do Gerente | AlphaPay{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'styles/manager_dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="manager-main">
+    <section class="panel">
+        <div class="panel-header">
+            <h2>Clientes associados</h2>
+            <p class="sub">Total: {{ managements|length }}</p>
+        </div>
+
+        {% if managements %}
+        <div class="clients-list">
+            {% for m in managements %}
+            <article class="client-card">
+                <div class="client-main">
+                    <h3 class="client-name">{{ m.client.user.first_name }} {{ m.client.user.last_name }}</h3>
+                    <p class="client-email">{{ m.client.user.email }}</p>
+                </div>
+
+                <div class="client-meta">
+                    <p><strong>Conta:</strong> {{ m.client.account_number }}</p>
+                    <p><strong>Saldo:</strong> R$ {{ m.client.balance }}</p>
+                    <a class="button small" href="{% url 'profile' %}">Ver perfil</a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+            <p class="empty">Sem clientes associados no momento.</p>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}
