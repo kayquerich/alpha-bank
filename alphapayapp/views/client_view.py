@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-import alphapayapp.models.User as UserModel
+from authentication.models.User import User as UserModel
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from alphapayapp.models.Client import Client
@@ -7,64 +7,11 @@ from alphapayapp.models.Transfer import Transfer
 from alphapayapp.models.Manager import Manager
 from alphapayapp.models.Management import Management
 
-def cadastro_view(request):
-
-    if request.method == 'POST':
-
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        cpf = request.POST.get('cpf')
-        
-        try: 
-            user = UserModel.User.objects.create(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                password=password,
-                cpf=cpf
-            )
-            
-            client = Client.objects.create(
-                user=user,
-                balance=0.00
-            )
-            
-            print(f"Criado usuário {user.email} com conta número {client.account_number}")
-
-            return redirect('login')
-        except Exception as e:
-            print(e)
-            return render(request, 'cadastro.html', {'error': str(e)})
-
-    return render(request, 'cadastro.html')
-
-def login_view(request):
-
-    if request.method == 'POST':
-
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-
-        print(f'Email: {email}, Password: {password}')
-
-        user = authenticate(request, username=email, password=password)
-        print(user)
-
-        if user is not None:
-            login(request, user)
-            return redirect('dashboard')
-        else:
-            return render(request, 'login.html', {'error': 'Email ou senha iválidos.'})
-
-    return render(request, 'login.html')
-
 @login_required(login_url='login')
 def dashboard_view(request):
 
     user = request.user
-    client_user = UserModel.User.objects.get(email=user.email)
+    client_user = UserModel.objects.get(email=user.email)
     account = Client.objects.get(user=client_user)
     transfers = Transfer.objects.filter(sender=account) | Transfer.objects.filter(receiver=account)
     transfers = transfers.order_by('-timestamp')[:5]
@@ -78,22 +25,10 @@ def dashboard_view(request):
     return render(request, 'dashboard.html', context)
 
 @login_required(login_url='login')
-def logout_view(request):
-    # preserve flag before logout (logout clears session)
-    is_manager = request.session.pop('is_manager', False)
-
-    logout(request)
-
-    if is_manager:
-        return redirect('manager_login')
-    return redirect('login')
-
-
-@login_required(login_url='login')
 def transfer_view(request):
 
     user = request.user
-    client_user = UserModel.User.objects.get(email=user.email)
+    client_user = UserModel.objects.get(email=user.email)
     account = Client.objects.get(user=client_user)
 
     context = {
@@ -140,7 +75,7 @@ def transfer_view(request):
 def transfer_success_view(request, transfer_id):
 
     user = request.user
-    client_user = UserModel.User.objects.get(email=user.email)
+    client_user = UserModel.objects.get(email=user.email)
     account = Client.objects.get(user=client_user)
     transfer = Transfer.objects.get(id=transfer_id)
 
@@ -158,7 +93,7 @@ def transfer_success_view(request, transfer_id):
 def profile_view(request):
 
     auth_user = request.user
-    client_user = UserModel.User.objects.get(email=auth_user.email)
+    client_user = UserModel.objects.get(email=auth_user.email)
     account = Client.objects.get(user=client_user)
 
     context = {

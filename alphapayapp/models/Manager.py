@@ -1,6 +1,6 @@
 from django.db import models
 import random
-from alphapayapp.models.User import User
+from authentication.models.User import User
 
 class Manager(models.Model):
 

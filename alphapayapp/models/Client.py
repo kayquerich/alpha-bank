@@ -1,6 +1,6 @@
 from django.db import models
 import random
-from alphapayapp.models.User import User
+from authentication.models.User import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
