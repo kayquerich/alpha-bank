@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from authentication.models.User import User as UserModel
-from alphapayapp.models.Manager import Manager
-from alphapayapp.models.Management import Management
+from management.models.Manager import Manager
+from management.models.Management import Management
 
 def manager_dashboard_view(request):
 
@@ -16,3 +16,13 @@ def manager_dashboard_view(request):
     }
 
     return render(request, 'manager_dashboard.html', context)
+
+def test_view(request):
+
+    context = {
+        'message': 'This is a test view',
+        'user' : 'Kayque',
+        'range': range(0,10)
+    }
+
+    return render(request, 'test.html', context)

@@ -27,8 +27,8 @@ class Client(models.Model):
 @receiver(post_save, sender=Client)
 def associate_manager (sender, instance, created, **kwargs):
 
-    from alphapayapp.models.Manager import Manager
-    from alphapayapp.models.Management import Management
+    from management.models.Manager import Manager
+    from management.models.Management import Management
 
     if created:
 

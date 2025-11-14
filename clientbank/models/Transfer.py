@@ -1,5 +1,5 @@
 from django.db import models
-from alphapayapp.models.Client import Client
+from clientbank.models.Client import Client
 
 class Transfer(models.Model):
 

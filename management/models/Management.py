@@ -1,6 +1,6 @@
 from django.db import models
-from alphapayapp.models.Client import Client
-from alphapayapp.models.Manager import Manager
+from clientbank.models.Client import Client
+from management.models.Manager import Manager
 
 class Management (models.Model):
 

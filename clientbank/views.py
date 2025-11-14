@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from authentication.models.User import User as UserModel
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from alphapayapp.models.Client import Client
-from alphapayapp.models.Transfer import Transfer
-from alphapayapp.models.Manager import Manager
-from alphapayapp.models.Management import Management
+from clientbank.models.Client import Client
+from clientbank.models.Transfer import Transfer
+from management.models.Manager import Manager
+from management.models.Management import Management
 
 @login_required(login_url='login')
 def dashboard_view(request):

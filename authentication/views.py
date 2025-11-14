@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from authentication.models.User import User as UserModel
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from alphapayapp.models.Client import Client
-from alphapayapp.models.Manager import Manager
+from clientbank.models.Client import Client
+from management.models.Manager import Manager
 
 # Create your views here.
 
