@@ -71,6 +71,40 @@ def transfer_view(request):
     return render(request, 'transfer.html', context)
 
 @login_required(login_url='login')
+def deposit_view(request):
+    user = request.user
+    client_user = UserModel.objects.get(email=user.email)
+    account = Client.objects.get(user=client_user)
+
+    context = {
+        'user': client_user,
+        'user_account': account,
+    }
+
+    if request.method == 'POST':
+        from decimal import Decimal
+
+        amount = request.POST.get('amount')
+
+        print(f'Amount: {amount}')
+
+        if amount and Decimal(amount) > 0:
+
+            account.balance += Decimal(amount)
+
+            account.save()
+
+            # Here you might want to log the deposit as a transaction if needed
+
+            return redirect('dashboard')
+
+        else:
+            context['error'] = 'Valor inválido para depósito.'
+            return render(request, 'deposit.html', context)
+
+    return render(request, 'deposit.html', context)
+
+@login_required(login_url='login')
 def transfer_success_view(request, transfer_id):
 
     user = request.user

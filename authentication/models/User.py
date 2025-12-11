@@ -3,6 +3,8 @@ from django.contrib.auth.hashers import make_password
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User as DjangoUser
+from django.core.exceptions import ValidationError
+import re
 
 class User(models.Model):
 
@@ -26,6 +28,12 @@ class User(models.Model):
 
         if self.password:
             self.password = make_password(self.password)
+
+        if self.cpf:
+            # Validação do formato CPF: XXX.XXX.XXX-XX
+            cpf_pattern = r'^\d{3}\.\d{3}\.\d{3}-\d{2}$'
+            if not re.match(cpf_pattern, self.cpf):
+                raise ValidationError("Formato de CPF inválido. Use o formato: XXX.XXX.XXX-XX")
 
         super().save(*args, **kwargs)
 

@@ -25,6 +25,9 @@ def cadastro_view(request):
                 password=password,
                 cpf=cpf
             )
+
+            if not user:
+                raise ValueError("Erro ao criar usuário.")
             
             client = Client.objects.create(
                 user=user,

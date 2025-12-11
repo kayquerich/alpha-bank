@@ -12,6 +12,7 @@ urlpatterns = [
     path('dashboard/', dashboard_view, name='dashboard'),
     path('logout/', logout_view, name='logout'),
     path('transfer/', transfer_view, name='transfer'),
+    path('deposit/', deposit_view, name='deposit'),
     path('success/<int:transfer_id>/', transfer_success_view, name='success'),
     path('profile/', profile_view, name='profile'),
     path('manager/login/', manage_login_view, name='manager_login'),
