@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Crédito | AlphaPay{% endblock %}
+{% block styles %} <link rel="stylesheet" href="{% static 'styles/credit.css' %}"/> {% endblock %}
+
+{% block content %}
+    <main>
+        <section class="page-header">
+            <div class="header-content">
+                <div class="header-text">
+                    <h2>Meu Crédito</h2>
+                    <p>Gerencie seu limite de crédito e faturas</p>
+                </div>
+                {% if credit and not pending_request %}
+                <button class="btn-request-increase" onclick="document.getElementById('requestModal').style.display='flex'">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    Solicitar Aumento
+                </button>
+                {% endif %}
+            </div>
+        </section>
+
+        {% if credit %}
+        <section class="credit-overview">
+            <div class="credit-card-large">
+                <div class="card-info">
+                    <h3>Alpha Credit</h3>
+                    <p class="card-holder">{{ user.first_name }} {{ user.last_name }}</p>
+                </div>
+                <div class="credit-details">
+                    <div class="detail-item">
+                        <span class="label">Limite Total</span>
+                        <p class="value">R$ {{ credit.credit_limit|floatformat:2 }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Limite Disponível</span>
+                        <p class="value available">R$ {{ available_limit|floatformat:2 }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="label">Valor em Fatura</span>
+                        <p class="value invoice">R$ {{ total_invoices|floatformat:2 }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="invoices-section">
+            <div class="section-header">
+                <h3>Minhas Faturas</h3>
+            </div>
+            {% if invoices %}
+            <div class="invoices-list">
+                {% for invoice in invoices %}
+                <div class="invoice-item {% if invoice.expiration_date < today %}overdue{% endif %}">
+                    <div class="invoice-info">
+                        <span class="invoice-date">
+                            <i class="fa-solid fa-calendar"></i>
+                            Vencimento: {{ invoice.expiration_date|date:"d/m/Y" }}
+                        </span>
+                        {% if invoice.expiration_date < today %}
+                        <span class="status-badge overdue">Vencida</span>
+                        {% elif invoice.expiration_date == today %}
+                        <span class="status-badge today">Vence Hoje</span>
+                        {% else %}
+                        <span class="status-badge open">Em Aberto</span>
+                        {% endif %}
+                    </div>
+                    <div class="invoice-amount">
+                        <span class="amount">R$ {{ invoice.value|floatformat:2 }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fa-solid fa-receipt"></i>
+                <p>Nenhuma fatura encontrada</p>
+            </div>
+            {% endif %}
+        </section>
+
+        {% else %}
+        <section class="no-credit-section">
+            <div class="no-credit-card">
+                <i class="fa-solid fa-credit-card"></i>
+                <h3>Você ainda não possui crédito</h3>
+                <p>Solicite seu cartão de crédito Alpha e aproveite benefícios exclusivos!</p>
+                
+                {% if pending_request %}
+                <div class="pending-notice">
+                    <i class="fa-solid fa-clock"></i>
+                    <p>Sua solicitação de R$ {{ pending_request.amount|floatformat:2 }} está sendo analisada</p>
+                    <small>Solicitado em {{ pending_request.requested_at|date:"d/m/Y H:i" }}</small>
+                </div>
+                {% else %}
+                <button class="btn-request" onclick="document.getElementById('requestModal').style.display='flex'">
+                    <i class="fa-solid fa-plus"></i>
+                    Solicitar Crédito
+                </button>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+
+    </main>
+
+    <!-- Modal de Solicitação -->
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('requestModal').style.display='none'">&times;</span>
+            <h3>Solicitar {% if credit %}Aumento de{% endif %} Crédito</h3>
+            <form method="POST" action="{% url 'request_credit' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="amount">Valor Solicitado (R$)</label>
+                    <input type="number" id="amount" name="amount" step="0.01" min="100" max="50000" required>
+                    <small>Valor entre R$ 100,00 e R$ 50.000,00</small>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Enviar Solicitação
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

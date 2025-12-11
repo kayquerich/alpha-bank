@@ -136,3 +136,79 @@ tr:nth-child(even) {
     color: #00d4ff;
     transition: background 0.3s, color 0.3s;
 }
+
+/* CREDIT CARD STYLES */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.card-badge {
+    background: rgba(0, 212, 255, 0.15);
+    color: #00d4ff;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.credit-info {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    flex: 1;
+}
+
+.info-item .label {
+    display: block;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+}
+
+.invoice-value {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #e74c3c;
+    margin: 0.5rem 0;
+}
+
+.limit-value {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #2ecc71;
+    margin: 0.5rem 0;
+}
+
+.due-date, .total-limit {
+    display: block;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.limit-bar {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.limit-progress {
+    background: #2ecc71;
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+@media(max-width: 768px) {
+    .credit-info {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}

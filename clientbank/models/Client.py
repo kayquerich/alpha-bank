@@ -3,6 +3,7 @@ import random
 from authentication.models.User import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from clientbank.models.Credit import Credit
 
 class Client(models.Model):
 
@@ -41,3 +42,9 @@ def associate_manager (sender, instance, created, **kwargs):
                 manager=random_manager,
                 client=instance
             )
+
+@receiver(post_save, sender=User)
+def create_client_credit(sender, instance, created, **kwargs):
+    if created:
+        Client.objects.create(user=instance)
+        Credit.objects.create(client=instance.client_set.first())

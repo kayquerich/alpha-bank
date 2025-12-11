@@ -13,17 +13,43 @@
         <section class="cards">
             <div class="card">
                 <h3>Saldo disponível</h3>
-                <p class="balance">R$ {{ account.balance|default:"0,00" }}</p>
+                <p class="balance">R$ {{ account.balance|floatformat:2 }}</p>
             </div>
-            <div class="card">
-                <h3>Informações da conta</h3>
-                <ul>
-                    <li><strong>Nome:</strong> {{ user.first_name }} {{ user.last_name }}</li>
-                    <li><strong>CPF:</strong> {{ user.cpf }}</li>
-                    <li><strong>Email:</strong> {{ user.email }}</li>
-                    <li><strong>Criado em:</strong> {{ user.created_at|date:"d/m/Y" }}</li>
-                </ul>
+            {% if credit %}
+            <div class="card credit-card">
+                <div class="card-header">
+                    <h3>Cartão de Crédito</h3>
+                    <span class="card-badge">Alpha Credit</span>
+                </div>
+                <div class="credit-info">
+                    <div class="info-item">
+                        <span class="label">Fatura Atual</span>
+                        <p class="invoice-value">R$ {% if current_invoice %}{{ current_invoice.value|floatformat:2 }}{% else %}0,00{% endif %}</p>
+                        <small class="due-date">Vencimento: {% if expiration_date_formatted %}{{ expiration_date_formatted }}{% else %}--/--/----{% endif %}</small>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Limite Disponível</span>
+                        <p class="limit-value">R$ {{ available_limit|floatformat:2 }}</p>
+                        <small class="total-limit">de R$ {{ credit.credit_limit|floatformat:2 }}</small>
+                    </div>
+                </div>
+                <div class="limit-bar">
+                    {% with percentage=usage_percentage|default:0 %}
+                    <div class="limit-progress" style="width: '{{ percentage }}%';"></div>
+                    {% endwith %}
+                </div>
             </div>
+            {% else %}
+            <div class="card credit-card">
+                <div class="card-header">
+                    <h3>Cartão de Crédito</h3>
+                    <span class="card-badge">Alpha Credit</span>
+                </div>
+                <div class="credit-info">
+                    <p style="text-align: center; color: #666; padding: 20px;">Nenhum crédito disponível. Solicite seu cartão de crédito!</p>
+                </div>
+            </div>
+            {% endif %}
         </section>
 
         <nav class="button-list" >
@@ -42,6 +68,14 @@
                             <i class="fa-solid fa-coins" ></i>
                         </span>
                         <span>Realizar Depósito</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'credit' %}">
+                        <span class="button-symbol" >
+                            <i class="fa-solid fa-credit-card" ></i>
+                        </span>
+                        <span>Meu Crédito</span>
                     </a>
                 </li>
             </ul>
