@@ -4,34 +4,95 @@
 {% block styles %} <link rel="stylesheet" href="{% static 'styles/profile.css' %}"> {% endblock %}
 
 {% block content %}
-<div class="perfil-container">
-    <h2 class="titulo">Perfil do Usuário</h2>
+<main class="profile-main">
+    <!-- Header do Perfil com Avatar -->
+    <section class="profile-header">
+        <div class="profile-avatar">
+            <div class="avatar-circle">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="avatar-badge">
+                <i class="fa-solid fa-check"></i>
+            </div>
+        </div>
+        <div class="profile-identity">
+            <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+            <p class="profile-email">{{ user.email }}</p>
+            <span class="profile-member-since">Membro desde {{ user.created_at|date:"d/m/Y" }}</span>
+        </div>
+    </section>
 
-    <div class="cards-container">
-        <div class="card perfil-info">
-            <h3>Informações Pessoais</h3>
-            <p><strong>Nome:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-            <p><strong>CPF:</strong> {{ user.cpf }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Conta:</strong> {{ account.account_number }}</p>
-            <p><strong>Data de criação:</strong> {{ user.created_at|date:"d/m/Y" }}</p>
-            <p><strong>Endereço:</strong> {{ account.address }}</p>
-            <p><strong>Telefone:</strong> {{ account.phone_number }}</p>
+    <!-- Grid de Informações -->
+    <section class="profile-grid">
+        <!-- Card Saldo -->
+        <div class="profile-card balance-card">
+            <div class="card-icon balance-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <div class="card-content">
+                <span class="card-label">Saldo Disponível</span>
+                <h2 class="card-value balance-value">R$ {{ account.balance|floatformat:2 }}</h2>
+                <span class="card-meta">Atualizado em {{ account.last_att|date:"d/m/Y H:i" }}</span>
+            </div>
         </div>
 
-        <div class="card saldo-info">
-            <h3>Saldo Atual</h3>
-            <p class="saldo">R$ {{ account.balance|floatformat:2 }}</p>
-            <p class="atualizacao">Última atualização: {{ account.last_att|date:"d/m/Y H:i" }}</p>
+        <!-- Card Conta -->
+        <div class="profile-card account-card">
+            <div class="card-icon account-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <div class="card-content">
+                <span class="card-label">Número da Conta</span>
+                <h2 class="card-value">{{ account.account_number }}</h2>
+                <span class="card-meta">AlphaPay Bank</span>
+            </div>
         </div>
-    </div>
 
-    <div class="acoes" style="height: 300px;" >
-        <h3>Configurações da Conta</h3>
-        <div class="botoes">
-            <a href="#" class="btn">Editar Perfil</a>
-            <a href="#" class="btn btn-secundario">Alterar Senha</a>
+        <!-- Informações Pessoais -->
+        <div class="profile-card info-card">
+            <div class="card-header">
+                <h3>
+                    <i class="fa-solid fa-id-card"></i>
+                    Informações Pessoais
+                </h3>
+            </div>
+            <div class="info-list">
+                <div class="info-item">
+                    <span class="info-label">CPF</span>
+                    <span class="info-value">{{ user.cpf }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Telefone</span>
+                    <span class="info-value">{{ account.phone_number }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Endereço</span>
+                    <span class="info-value">{{ account.address }}</span>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+
+        <!-- Ações Rápidas -->
+        <div class="profile-card actions-card">
+            <div class="card-header">
+                <h3>
+                    <i class="fa-solid fa-gear"></i>
+                    Configurações
+                </h3>
+            </div>
+            <div class="actions-list">
+                <a href="{% url 'update_client' %}" class="action-btn">
+                    <div class="action-icon">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>
+                    <div class="action-content">
+                        <span class="action-title">Editar Perfil</span>
+                        <span class="action-desc">Atualize suas informações</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
 {% endblock %}

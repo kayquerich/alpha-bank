@@ -2,7 +2,8 @@
 .transferencia-container {
     width: 100%;
     max-width: 700px;
-    margin-top: 100px;
+    margin: 0 auto;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -53,7 +54,8 @@
     display: flex;
     gap: 1rem;
     justify-content: center;
-    margin-top: 1rem;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .btn {
@@ -78,4 +80,24 @@
 .btn-secundario:hover {
     background: #185adb;
     color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .transferencia-container {
+        padding: 1rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .botoes {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
 }

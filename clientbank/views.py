@@ -321,3 +321,40 @@ def request_credit_view(request):
         return redirect('credit')
     
     return redirect('credit')
+
+@login_required(login_url='login')
+def update_client_view(request):
+    user = request.user
+    client_user = UserModel.objects.get(email=user.email)
+    account = Client.objects.get(user=client_user)
+
+    if request.method == 'POST':
+
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        address = request.POST.get('address')
+        phone_number = request.POST.get('phone_number')
+
+        if first_name:
+            client_user.first_name = first_name
+        if last_name:
+            client_user.last_name = last_name
+        if email:
+            client_user.email = email.lower()
+        if address:
+            account.address = address
+        if phone_number:
+            account.phone_number = phone_number
+
+        account.save()
+        client_user.save()
+
+        return redirect('profile')
+
+    context = {
+        'user': client_user,
+        'account': account,
+    }
+
+    return render(request, 'update_client.html', context)

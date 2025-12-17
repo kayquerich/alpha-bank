@@ -5,6 +5,7 @@ from management.models.Management import Management
 from clientbank.models.CreditRequest import CreditRequest
 from django.contrib.auth.decorators import login_required
 from django import template
+from decimal import Decimal
 
 def get_credit_requests(manager, managements):
 
@@ -68,7 +69,7 @@ def credit_requests_view(request):
                 
                 # Adicionar ou atualizar crédito do cliente
                 credit, created = Credit.objects.get_or_create(client=credit_request.client)
-                credit.credit_limit += credit_request.amount
+                credit.credit_limit = Decimal(str(credit.credit_limit)) + credit_request.amount
                 credit.save()
                 
             elif action == 'reject':

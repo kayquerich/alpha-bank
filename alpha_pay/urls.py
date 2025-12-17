@@ -20,4 +20,5 @@ urlpatterns = [
     path('manager/login/', manage_login_view, name='manager_login'),
     path('manager/dashboard/', manager_dashboard_view, name='manager_dashboard'),
     path('manager/credit-requests/', credit_requests_view, name='credit_requests'),
+    path('update-client/', update_client_view, name='update_client'),
 ]

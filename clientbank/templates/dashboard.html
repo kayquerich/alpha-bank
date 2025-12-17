@@ -35,7 +35,7 @@
                 </div>
                 <div class="limit-bar">
                     {% with percentage=usage_percentage|default:0 %}
-                    <div class="limit-progress" style="width: '{{ percentage }}%';"></div>
+                    <div class="limit-progress" data-percentage="{{ percentage }}"></div>
                     {% endwith %}
                 </div>
             </div>
@@ -109,4 +109,11 @@
             </table>
         </section>
     </main>
+    <script>
+        const progressBars = document.querySelectorAll('.limit-progress');
+        progressBars.forEach(bar => {
+            const percentage = bar.getAttribute('data-percentage');
+            bar.style.width = percentage + '%';
+        }); // eu sou um gênio
+    </script>
 {% endblock %}

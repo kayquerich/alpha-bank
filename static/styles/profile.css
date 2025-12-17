@@ -1,125 +1,318 @@
-body {
-    background: linear-gradient(180deg, #0a1626 0%, #0e213d 100%);
-    font-family: 'Poppins', sans-serif;
-    color: #e5e5e5;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 100vh;
-}
+/* Profile Page Styles */
 
-header {
-    margin-bottom: -5em;
-}
-
-.perfil-container {
-    width: 100%;
-    max-width: 900px;
-    margin: 120px auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.titulo {
-    text-align: center;
-    color: #00a8ff;
-    font-size: 1.9rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    justify-content: center;
-}
-
-.card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 18px;
+.profile-main {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 2rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(6px);
-    flex: 1 1 380px;
-    min-width: 340px;
 }
 
-.card h3 {
-    color: #185adb;
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-.card p {
-    font-size: 1rem;
-    margin: 6px 0;
-}
-
-.saldo {
-    color: #29cc7a;
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-top: 10px;
-}
-
-.atualizacao {
-    color: #a0aec0;
-    font-size: 0.9rem;
-    margin-top: 8px;
-}
-
-.acoes {
-    text-align: center;
-}
-
-.botoes {
+/* Profile Header */
+.profile-header {
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.profile-avatar {
+    position: relative;
+}
+
+.avatar-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00d4ff 0%, #0077ff 100%);
+    display: flex;
+    align-items: center;
     justify-content: center;
-    margin-top: 1rem;
+    font-size: 3rem;
+    color: white;
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
 }
 
-.btn {
-    background: #185adb;
-    color: #fff;
-    padding: 0.8rem 1.5rem;
-    border-radius: 10px;
-    text-decoration: none;
+.avatar-badge {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 32px;
+    height: 32px;
+    background: #4ade80;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #0d1117;
+    font-size: 0.9rem;
+    color: white;
+}
+
+.profile-identity h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.profile-email {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+}
+
+.profile-member-since {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Profile Grid */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+/* Balance Card */
+.balance-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.balance-icon {
+    background: linear-gradient(135deg, rgba(74, 222, 128, 0.2) 0%, rgba(34, 197, 94, 0.2) 100%);
+    color: #4ade80;
+}
+
+.account-icon {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 119, 255, 0.2) 100%);
+    color: #00d4ff;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-label {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 0.3rem 0;
+}
+
+.balance-value {
+    color: #4ade80;
+}
+
+.card-meta {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Account Card */
+.account-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Info Card */
+.info-card {
+    grid-column: span 2;
+}
+
+.card-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-header h3 i {
+    color: #00d4ff;
+}
+
+.info-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.info-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: white;
     font-weight: 500;
-    transition: 0.3s ease;
 }
 
-.btn:hover {
-    background: #0f4cc9;
+/* Actions Card */
+.actions-card {
+    grid-column: span 2;
 }
 
-.btn-secundario {
-    background: transparent;
-    border: 2px solid #185adb;
+.actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
 }
 
-.btn-secundario:hover {
-    background: #185adb;
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 
-.btn-perigo {
-    background: #e63946;
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 212, 255, 0.3);
+    transform: translateX(5px);
 }
 
-.btn-perigo:hover {
-    background: #c62828;
+.action-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    background: rgba(0, 212, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00d4ff;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.action-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.action-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+}
+
+.action-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.action-btn > i {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-card,
+    .actions-card {
+        grid-column: span 1;
+    }
 }
 
 @media (max-width: 768px) {
-    .perfil-container {
-        margin: 100px 1rem;
+    .profile-main {
+        padding: 1rem;
     }
 
-    .cards-container {
+    .profile-header {
         flex-direction: column;
-        align-items: center;
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .avatar-circle {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+    }
+
+    .profile-identity h1 {
+        font-size: 1.5rem;
+    }
+
+    .card-value {
+        font-size: 1.5rem;
+    }
+
+    .info-list {
+        grid-template-columns: 1fr;
+    }
+
+    .action-btn:hover {
+        transform: translateX(0);
     }
 }
