@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Assistant | AlphaPay</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'styles/assistant.css' %}">
+</head>
+<body>
+    <div class="chat-wrapper">
+        <!-- Header -->
+        <header class="chat-header">
+            <div class="header-left">
+                <a class="btn-back" href="{% url 'dashboard' %}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                <div class="assistant-avatar">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="header-info">
+                    <h1>Alpha Assistant</h1>
+                    <div class="status">
+                        <span class="status-dot"></span>
+                        <span>Online</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Mensagens -->
+        <div class="messages-container" id="messagesContainer">
+            {% if chat_session.messages.count == 0 %}
+            <!-- Welcome Screen -->
+            <div class="welcome-container" id="welcomeScreen">
+                <div class="welcome-icon">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div class="welcome-text">
+                    <h2>Bem-vindo, {{ client.user.first_name }}!</h2>
+                    <p>Sou o Alpha Assistant, seu assistente virtual do AlphaPay. Como posso ajudá-lo hoje?</p>
+                </div>
+                <div class="suggestions">
+                    <div class="suggestion-card">
+                        <i class="fa-solid fa-wallet"></i>
+                        Consultar meu saldo
+                    </div>
+                    <div class="suggestion-card">
+                        <i class="fa-solid fa-credit-card"></i>
+                        Informações sobre crédito
+                    </div>
+                    <div class="suggestion-card">
+                        <i class="fa-solid fa-exchange-alt"></i>
+                        Como fazer transferências
+                    </div>
+                    <div class="suggestion-card">
+                        <i class="fa-solid fa-question-circle"></i>
+                        Suporte e ajuda
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <!-- Histórico de Mensagens -->
+            <div class="messages" id="messages">
+                {% for message in chat_session.messages.all %}
+                <div class="message {% if message.sender == 'user' %}user{% else %}assistant{% endif %}">
+                    <div class="message-avatar">
+                        <i class="fa-solid fa-{% if message.sender == 'user' %}user{% else %}robot{% endif %}"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="bubble">
+                            <p>{{ message.message }}</p>
+                        </div>
+                        <span class="timestamp">{{ message.timestamp|date:"d/m/Y H:i" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Input -->
+        <div class="input-container">
+            <form method="POST" id="chatForm">
+                {% csrf_token %}
+                <div class="input-wrapper">
+                    <button type="button" class="btn-attach">
+                        <i class="fa-solid fa-paperclip"></i>
+                    </button>
+                    <textarea 
+                        id="messageInput"
+                        name="message"
+                        placeholder="Digite sua mensagem..."
+                        rows="1"
+                        required
+                    ></textarea>
+                    <button type="submit" class="btn-send">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Auto-scroll para última mensagem
+        const messagesContainer = document.getElementById('messagesContainer');
+        if (messagesContainer) {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Sugestões clicáveis
+        const buttons = document.querySelectorAll('.suggestion-card');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const automaticMessage = button.textContent.trim();
+                document.getElementById('messageInput').value = automaticMessage;
+                document.getElementById('messageInput').focus();
+            });
+        });
+
+        // Expandir textarea automaticamente
+        const textarea = document.getElementById('messageInput');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+        });
+
+        // Enviar com Enter (Shift+Enter para nova linha)
+        textarea.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                document.getElementById('chatForm').submit();
+            }
+        });
+    </script>
+</body>
+</html>
