@@ -1,0 +1,235 @@
+{% extends 'manager_base.html' %}
+{% load static %}
+
+{% block title %}Solicitações de Crédito | AlphaPay{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'styles/credit_requests.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="credit-requests-container">
+    <section class="page-header">
+        <h2>Solicitações de Crédito</h2>
+        <p>Analise e aprove solicitações de crédito dos clientes</p>
+    </section>
+
+    {% if credit_requests %}
+    <section class="requests-table-container">
+        <table class="requests-table">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Conta</th>
+                    <th>Valor Solicitado</th>
+                    <th>Data da Solicitação</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in credit_requests %}
+                <tr class="request-row {{ request.status }}">
+                    <td>
+                        <div class="client-cell">
+                            <div class="client-info">
+                                <span class="client-name">{{ request.client.user.first_name }} {{ request.client.user.last_name }}</span>
+                                <span class="client-email">{{ request.client.user.email }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="account-cell">{{ request.client.account_number }}</td>
+                    <td class="amount-cell">R$ {{ request.amount|floatformat:2 }}</td>
+                    <td class="date-cell">{{ request.requested_at|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        <div class="status-badge {{ request.status }}">
+                            {% if request.status == 'pending' %}
+                                <i class="fa-solid fa-clock"></i> Pendente
+                            {% elif request.status == 'approved' %}
+                                <i class="fa-solid fa-check"></i> Aprovado
+                            {% else %}
+                                <i class="fa-solid fa-xmark"></i> Rejeitado
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td class="actions-cell">
+                        {% if request.status == 'pending' %}
+                        <div class="action-buttons">
+                            <button type="button" class="btn-action btn-approve" onclick="openApproveModal('{{ request.id }}', '{{ request.client.user.first_name }} {{ request.client.user.last_name }}', '{{ request.amount }}')">
+                                <i class="fa-solid fa-check"></i>
+                                <span>Aprovar</span>
+                            </button>
+                            <button type="button" class="btn-action btn-reject" onclick="openRejectModal('{{ request.id }}', '{{ request.client.user.first_name }} {{ request.client.user.last_name }}', '{{ request.client.user.email }}')">
+                                <i class="fa-solid fa-xmark"></i>
+                                <span>Rejeitar</span>
+                            </button>
+                            <button type="button" class="btn-action btn-details" onclick="toggleDetails('{{ request.id }}')">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                        {% else %}
+                        <button type="button" class="btn-action btn-details" onclick="toggleDetails('{{ request.id }}')">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>Detalhes</span>
+                        </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr class="details-row" id="details-{{ request.id }}" style="display: none;">
+                    <td colspan="6">
+                        <div class="details-content">
+                            <div class="details-header">
+                                <h4><i class="fa-solid fa-info-circle"></i> Detalhes da Solicitação</h4>
+                            </div>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <span class="label">Cliente</span>
+                                    <span class="value">{{ request.client.user.first_name }} {{ request.client.user.last_name }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Email</span>
+                                    <span class="value">{{ request.client.user.email }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">CPF</span>
+                                    <span class="value">{{ request.client.user.cpf|default:"N/A" }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Número da Conta</span>
+                                    <span class="value">{{ request.client.account_number }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Valor Solicitado</span>
+                                    <span class="value highlight">R$ {{ request.amount|floatformat:2 }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="label">Data da Solicitação</span>
+                                    <span class="value">{{ request.requested_at|date:"d/m/Y H:i" }}</span>
+                                </div>
+                                {% if request.reviewed_at %}
+                                <div class="detail-item">
+                                    <span class="label">Data da Revisão</span>
+                                    <span class="value">{{ request.reviewed_at|date:"d/m/Y H:i" }}</span>
+                                </div>
+                                {% endif %}
+                                {% if request.reviewed_by %}
+                                <div class="detail-item">
+                                    <span class="label">Revisado por</span>
+                                    <span class="value">{{ request.reviewed_by.user.first_name }} {{ request.reviewed_by.user.last_name }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% if request.notes %}
+                            <div class="notes-section">
+                                <span class="label"><i class="fa-solid fa-note-sticky"></i> Observações</span>
+                                <p class="notes-text">{{ request.notes }}</p>
+                            </div>
+                            {% else %}
+                            {% if request.status == 'pending' %}
+                            <div class="notes-section empty">
+                                <span class="label"><i class="fa-solid fa-note-sticky"></i> Observações</span>
+                                <p class="notes-text">Nenhuma observação adicionada ainda.</p>
+                            </div>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    {% else %}
+    <section class="empty-state">
+        <i class="fa-solid fa-inbox"></i>
+        <h3>Nenhuma solicitação encontrada</h3>
+        <p>Não há solicitações de crédito no momento</p>
+    </section>
+    {% endif %}
+</main>
+
+<!-- Modal de Aprovação -->
+<div id="approveModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('approveModal')">&times;</span>
+        <h3><i class="fa-solid fa-check-circle"></i> Aprovar Solicitação</h3>
+        <p class="modal-text">Tem certeza que deseja aprovar a solicitação de <strong id="approveClientName"></strong> no valor de <strong id="approveAmount"></strong>?</p>
+        <form method="POST" action="{% url 'credit_requests' %}" id="approveForm">
+            {% csrf_token %}
+            <input type="hidden" name="request_id" id="approveRequestId">
+            <input type="hidden" name="action" value="approve">
+            <div class="form-group">
+                <label for="approve_notes">Observações (opcional)</label>
+                <textarea id="approve_notes" name="notes" rows="3" placeholder="Adicione observações sobre a aprovação..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-cancel" onclick="closeModal('approveModal')">Cancelar</button>
+                <button type="submit" class="btn btn-approve">
+                    <i class="fa-solid fa-check"></i>
+                    Confirmar Aprovação
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de Rejeição -->
+<div id="rejectModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('rejectModal')">&times;</span>
+        <h3><i class="fa-solid fa-times-circle"></i> Rejeitar Solicitação</h3>
+        <p class="modal-text">Tem certeza que deseja rejeitar a solicitação de <strong id="rejectClientName"></strong>?</p>
+        <form method="POST" action="{% url 'credit_requests' %}" id="rejectForm">
+            {% csrf_token %}
+            <input type="hidden" name="request_id" id="rejectRequestId">
+            <input type="hidden" name="action" value="reject">
+            <div class="form-group">
+                <label for="reject_notes">Motivo da Rejeição (obrigatório)</label>
+                <textarea id="reject_notes" name="notes" rows="3" placeholder="Explique o motivo da rejeição..." required></textarea>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-cancel" onclick="closeModal('rejectModal')">Cancelar</button>
+                <button type="submit" class="btn btn-reject">
+                    <i class="fa-solid fa-xmark"></i>
+                    Confirmar Rejeição
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openApproveModal(requestId, clientName, amount) {
+    document.getElementById('approveRequestId').value = requestId;
+    document.getElementById('approveClientName').textContent = clientName;
+    document.getElementById('approveAmount').textContent = 'R$ ' + parseFloat(amount).toFixed(2).replace('.', ',');
+    document.getElementById('approveModal').style.display = 'flex';
+}
+
+function openRejectModal(requestId, clientName, clientEmail) {
+    document.getElementById('rejectRequestId').value = requestId;
+    document.getElementById('rejectClientName').textContent = clientName;
+    document.getElementById('rejectModal').style.display = 'flex';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+function toggleDetails(requestId) {
+    const detailsRow = document.getElementById('details-' + requestId);
+    if (detailsRow.style.display === 'none') {
+        detailsRow.style.display = 'table-row';
+    } else {
+        detailsRow.style.display = 'none';
+    }
+}
+
+// Fechar modal ao clicar fora
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

@@ -22,21 +22,62 @@
 
         {% if credit %}
         <section class="credit-overview">
-            <div class="credit-card-large">
-                <div class="card-info">
-                    <h3>Alpha Credit</h3>
-                    <p class="card-holder">{{ user.first_name }} {{ user.last_name }}</p>
+            <div class="credit-card-visual">
+                <div class="card-front">
+                    <div class="card-brand">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span>AlphaPay</span>
+                    </div>
+                    <div class="card-chip">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div class="card-number">
+                        <span>••••</span>
+                        <span>••••</span>
+                        <span>••••</span>
+                        <span>{{ account.account_number }}</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-holder-info">
+                            <span class="label">Titular</span>
+                            <span class="name">{{ user.first_name|upper }} {{ user.last_name|upper }}</span>
+                        </div>
+                        <div class="card-valid">
+                            <span class="label">Validade</span>
+                            <span class="date">12/29</span>
+                        </div>
+                    </div>
+                    <div class="card-decoration">
+                        <div class="circle circle-1"></div>
+                        <div class="circle circle-2"></div>
+                    </div>
                 </div>
-                <div class="credit-details">
-                    <div class="detail-item">
+            </div>
+
+            <div class="credit-info-grid">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <div class="info-content">
                         <span class="label">Limite Total</span>
                         <p class="value">R$ {{ credit.credit_limit|floatformat:2 }}</p>
                     </div>
-                    <div class="detail-item">
+                </div>
+                <div class="info-card">
+                    <div class="info-icon available">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="info-content">
                         <span class="label">Limite Disponível</span>
                         <p class="value available">R$ {{ available_limit|floatformat:2 }}</p>
                     </div>
-                    <div class="detail-item">
+                </div>
+                <div class="info-card">
+                    <div class="info-icon invoice">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <div class="info-content">
                         <span class="label">Valor em Fatura</span>
                         <p class="value invoice">R$ {{ total_invoices|floatformat:2 }}</p>
                     </div>

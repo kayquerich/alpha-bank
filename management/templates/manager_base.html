@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AlphaPay Manager{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'styles/manager_base.css' %}">
     {% block styles %}{% endblock %}
 </head>
@@ -25,6 +26,14 @@
     <nav class="manager-nav">
         <ul>
             <li><a href="{% url 'manager_dashboard' %}" class="nav-link">Dashboard</a></li>
+            <li>
+                <a href="{% url 'credit_requests' %}" class="nav-link">
+                    Solicitações
+                    {% if credit_requests %}
+                    <span class="notification-badge">{{ credit_requests|length }}</span>
+                    {% endif %}
+                </a>
+            </li>
             <li><a href="#" class="nav-link">Relatórios</a></li>
             <li><a href="#" class="nav-link">Configurações</a></li>
         </ul>
