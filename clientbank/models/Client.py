@@ -43,8 +43,14 @@ def associate_manager (sender, instance, created, **kwargs):
                 client=instance
             )
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=Client)
 def create_client_credit(sender, instance, created, **kwargs):
     if created:
         Client.objects.create(user=instance)
         Credit.objects.create(client=instance.client_set.first())
+
+@receiver(post_save, sender=Client)
+def create_chat_session(sender, instance, created, **kwargs):
+    if created:
+        from chatbot.models import ChatSession
+        ChatSession.objects.create(client=instance)

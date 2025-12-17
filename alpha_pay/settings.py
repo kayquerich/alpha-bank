@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'management',
     'authentication',
     'clientbank',
+    'chatbot',
 ]
 
 MIDDLEWARE = [

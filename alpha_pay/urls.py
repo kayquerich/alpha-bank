@@ -3,6 +3,7 @@ from django.urls import path
 from management.views import *
 from authentication.views import *
 from clientbank.views import *
+from chatbot.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -21,4 +22,5 @@ urlpatterns = [
     path('manager/dashboard/', manager_dashboard_view, name='manager_dashboard'),
     path('manager/credit-requests/', credit_requests_view, name='credit_requests'),
     path('update-client/', update_client_view, name='update_client'),
+    path('assistant/', assistant_view, name='assistant'),
 ]
