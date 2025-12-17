@@ -36,6 +36,15 @@
                     <textarea id="descricao" name="description" placeholder="Motivo da transferência..."></textarea>
                 </div>
 
+                <div class="form-group">
+                    <label for="payment_type">Tipo de Pagamento</label>
+                    <select id="payment_type" name="payment_type" required>
+                        <option value="">Selecione...</option>
+                        <option value="saldo" selected>Saldo da Conta</option>
+                        <option value="credito">Cartão de Crédito</option>
+                    </select>
+                </div>
+
                 <button type="submit" class="btn-transfer">
                     <i class="fa-solid fa-money-bill-transfer"></i> Enviar Transferência
                 </button>

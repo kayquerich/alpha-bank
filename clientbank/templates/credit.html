@@ -11,12 +11,20 @@
                     <h2>Meu Crédito</h2>
                     <p>Gerencie seu limite de crédito e faturas</p>
                 </div>
-                {% if credit and not pending_request %}
-                <button class="btn-request-increase" onclick="document.getElementById('requestModal').style.display='flex'">
-                    <i class="fa-solid fa-arrow-up"></i>
-                    Solicitar Aumento
-                </button>
-                {% endif %}
+                <div class="header-actions">
+                    {% if credit and not pending_request %}
+                    <button class="btn-request-increase" onclick="document.getElementById('requestModal').style.display='flex'">
+                        <i class="fa-solid fa-arrow-up"></i>
+                        Solicitar Aumento
+                    </button>
+                    {% endif %}
+                    {% if total_invoices > 0 %}
+                    <button class="btn-pay-invoice" onclick="document.getElementById('payInvoiceModal').style.display='flex'">
+                        <i class="fa-solid fa-money-bill-wave"></i>
+                        Pagar Fatura
+                    </button>
+                    {% endif %}
+                </div>
             </div>
         </section>
 
@@ -98,10 +106,10 @@
                             <i class="fa-solid fa-calendar"></i>
                             Vencimento: {{ invoice.expiration_date|date:"d/m/Y" }}
                         </span>
-                        {% if invoice.expiration_date < today %}
-                        <span class="status-badge overdue">Vencida</span>
-                        {% elif invoice.expiration_date == today %}
-                        <span class="status-badge today">Vence Hoje</span>
+                        {% if invoice.closed and not invoice.pay %}
+                        <span class="status-badge overdue">Fechada</span>
+                        {% elif invoice.pay %}
+                        <span class="status-badge paid">Paga</span>
                         {% else %}
                         <span class="status-badge open">Em Aberto</span>
                         {% endif %}
@@ -160,6 +168,32 @@
                 <button type="submit" class="btn-submit">
                     <i class="fa-solid fa-paper-plane"></i>
                     Enviar Solicitação
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Pagamento de Fatura -->
+    <div id="payInvoiceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('payInvoiceModal').style.display='none'">&times;</span>
+            <h3>Pagar Fatura</h3>
+            <form method="POST" action="{% url 'credit' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="invoice_amount">Valor Total da Fatura</label>
+                    <input type="text" id="invoice_amount" value="R$ {{ total_invoices|floatformat:2 }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="payment_method">Forma de Pagamento</label>
+                    <select id="payment_method" name="payment_method" required>
+                        <option value="">Selecione...</option>
+                        <option value="saldo">Usar Saldo da Conta</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-check"></i>
+                    Confirmar Pagamento
                 </button>
             </form>
         </div>

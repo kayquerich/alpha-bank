@@ -63,7 +63,8 @@ label {
 }
 
 input,
-textarea {
+textarea,
+select {
     padding: 0.8rem;
     border: none;
     border-radius: 8px;
@@ -73,12 +74,21 @@ textarea {
     font-size: 0.95rem;
     transition: 0.3s;
     width: 100%;
+    cursor: pointer;
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
     border-color: #0056d6;
     outline: none;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+select option {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 0.5rem;
 }
 
 textarea {

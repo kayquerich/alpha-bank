@@ -7,6 +7,10 @@ class Transfer(models.Model):
     receiver = models.ForeignKey(Client, related_name='received_transfers', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=50, default='Saldo', blank=True, null=True, choices=[
+        ('Saldo', 'Saldo'),
+        ('Crédito', 'Crédito'),
+    ])
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

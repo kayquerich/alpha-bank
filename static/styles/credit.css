@@ -32,6 +32,12 @@ main {
     font-size: 1rem;
 }
 
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
 /* Credit Overview */
 .credit-overview {
     margin-bottom: 2rem;
@@ -430,6 +436,29 @@ main {
     box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
 }
 
+.btn-pay-invoice {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
+    white-space: nowrap;
+}
+
+.btn-pay-invoice:hover {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+}
+
 .btn-back {
     display: inline-flex;
     align-items: center;
@@ -504,7 +533,8 @@ main {
     margin-bottom: 0.5rem;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -515,10 +545,16 @@ main {
     transition: border-color 0.3s ease;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
     outline: none;
     border-color: #00d4ff;
     background: rgba(255, 255, 255, 0.08);
+}
+
+.form-group select option {
+    background: #1a1a2e;
+    color: white;
 }
 
 .form-group small {
@@ -569,7 +605,13 @@ main {
         gap: 1rem;
     }
 
-    .btn-request-increase {
+    .header-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .btn-request-increase,
+    .btn-pay-invoice {
         width: 100%;
         justify-content: center;
     }
