@@ -37,68 +37,100 @@
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count">3</span>
                 </button>
+                <button class="menu-btn" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </header>
 
+    <!-- SIDEBAR MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-btn" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="sidebar-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Voltar ao Banco</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Minhas Compras</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Carrinho</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-heart"></i>
+                <span>Favoritos</span>
+            </a>
+        </nav>
+    </div>
+
     <!-- CATEGORIAS -->
     <section class="categories-section">
         <div class="categories-container">
-            <div class="category-item active">
+            <div class="category-item active" data-category="all">
                 <div class="category-icon">
                     <i class="fas fa-star"></i>
                 </div>
                 <span>Destaques</span>
             </div>
-            <div class="category-item">
+            <div class="category-item" data-category="Eletrônicos">
                 <div class="category-icon">
                     <i class="fas fa-laptop"></i>
                 </div>
                 <span>Eletrônicos</span>
             </div>
-            <div class="category-item">
+            <div class="category-item" data-category="Moda">
                 <div class="category-icon">
                     <i class="fas fa-tshirt"></i>
                 </div>
                 <span>Moda</span>
             </div>
-            <div class="category-item">
+            <div class="category-item" data-category="Casa">
                 <div class="category-icon">
                     <i class="fas fa-home"></i>
                 </div>
                 <span>Casa</span>
             </div>
-            <div class="category-item">
+            <div class="category-item" data-category="Esportes">
                 <div class="category-icon">
                     <i class="fas fa-dumbbell"></i>
                 </div>
                 <span>Esportes</span>
             </div>
-            <div class="category-item">
+            <div class="category-item" data-category="Livros">
                 <div class="category-icon">
                     <i class="fas fa-book"></i>
                 </div>
                 <span>Livros</span>
             </div>
-            <div class="category-item">
+            <div class="category-item" data-category="Games">
                 <div class="category-icon">
                     <i class="fas fa-gamepad"></i>
                 </div>
                 <span>Games</span>
             </div>
-            <div class="category-item">
+            <div class="category-item" data-category="Alimentos">
                 <div class="category-icon">
                     <i class="fas fa-utensils"></i>
                 </div>
                 <span>Alimentos</span>
             </div>
-            <div class="category-item">
+            <div class="category-item" data-category="Arte">
                 <div class="category-icon">
                     <i class="fas fa-palette"></i>
                 </div>
                 <span>Arte</span>
             </div>
-            <div class="category-item">
+            <div class="category-item" data-category="Bebês">
                 <div class="category-icon">
                     <i class="fas fa-baby"></i>
                 </div>
@@ -116,183 +148,50 @@
             </div>
 
             <div class="products-grid">
-                <!-- Produto 1 -->
-                <div class="product-card">
-                    <div class="product-badge">-20%</div>
+                {% for product in products %}
+                <div class="product-card" data-category="{{ product.category }}">
+                    {% if product.discount_percentage and product.discount_percentage > 0 %}
+                    <div class="product-badge">-{{ product.discount_percentage|floatformat:0 }}%</div>
+                    {% endif %}
+                    
                     <div class="product-image">
-                        <i class="fas fa-laptop fa-4x"></i>
+                        {% if product.image_url %}
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <i class="fas fa-box fa-4x"></i>
+                        {% endif %}
                     </div>
+                    
                     <div class="product-info">
-                        <h3 class="product-title">Notebook Gamer Pro X</h3>
+                        <h3 class="product-title">{{ product.name }}</h3>
+                        
+                        {% if product.average_rating %}
                         <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>(245)</span>
+                            {% with rating=product.average_rating|floatformat:0|add:"0" %}
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= rating %}
+                                    <i class="fas fa-star"></i>
+                                    {% else %}
+                                    <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
                         </div>
+                        {% endif %}
+                        
                         <div class="product-price">
-                            <span class="price-old">R$ 6.999,00</span>
-                            <span class="price-current">R$ 5.599,00</span>
+                            {% if product.old_price %}
+                            <span class="price-old">R$ {{ product.old_price|floatformat:2 }}</span>
+                            {% endif %}
+                            <span class="price-current">R$ {{ product.price|floatformat:2 }}</span>
                         </div>
                     </div>
                 </div>
-
-                <!-- Produto 2 -->
-                <div class="product-card">
-                    <div class="product-badge new">Novo</div>
-                    <div class="product-image">
-                        <i class="fas fa-headphones fa-4x"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Fone Bluetooth Premium</h3>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>(512)</span>
-                        </div>
-                        <div class="product-price">
-                            <span class="price-current">R$ 899,00</span>
-                        </div>
-                    </div>
+                {% empty %}
+                <div class="no-products">
+                    <p>Nenhum produto disponível no momento.</p>
                 </div>
-
-                <!-- Produto 3 -->
-                <div class="product-card">
-                    <div class="product-badge">-15%</div>
-                    <div class="product-image">
-                        <i class="fas fa-mobile-alt fa-4x"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Smartphone Ultra 5G</h3>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>(189)</span>
-                        </div>
-                        <div class="product-price">
-                            <span class="price-old">R$ 2.999,00</span>
-                            <span class="price-current">R$ 2.549,00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produto 4 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-camera fa-4x"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Câmera DSLR Profissional</h3>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>(326)</span>
-                        </div>
-                        <div class="product-price">
-                            <span class="price-current">R$ 4.299,00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produto 5 -->
-                <div class="product-card">
-                    <div class="product-badge">-30%</div>
-                    <div class="product-image">
-                        <i class="fas fa-watch fa-4x"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Smartwatch Fitness Pro</h3>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>(678)</span>
-                        </div>
-                        <div class="product-price">
-                            <span class="price-old">R$ 1.299,00</span>
-                            <span class="price-current">R$ 909,00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produto 6 -->
-                <div class="product-card">
-                    <div class="product-badge new">Novo</div>
-                    <div class="product-image">
-                        <i class="fas fa-tablet-alt fa-4x"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Tablet Ultra Slim</h3>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>(156)</span>
-                        </div>
-                        <div class="product-price">
-                            <span class="price-current">R$ 2.199,00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produto 7 -->
-                <div class="product-card">
-                    <div class="product-badge">-25%</div>
-                    <div class="product-image">
-                        <i class="fas fa-keyboard fa-4x"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Teclado Mecânico RGB</h3>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>(423)</span>
-                        </div>
-                        <div class="product-price">
-                            <span class="price-old">R$ 599,00</span>
-                            <span class="price-current">R$ 449,00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Produto 8 -->
-                <div class="product-card">
-                    <div class="product-image">
-                        <i class="fas fa-mouse fa-4x"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-title">Mouse Gamer Wireless</h3>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>(891)</span>
-                        </div>
-                        <div class="product-price">
-                            <span class="price-current">R$ 299,00</span>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </main>
@@ -336,5 +235,66 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Menu Sidebar
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeMenu = document.getElementById('closeMenu');
+
+        menuToggle.addEventListener('click', function() {
+            sidebarMenu.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        // Filtro de categorias
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryItems = document.querySelectorAll('.category-item');
+            const productCards = document.querySelectorAll('.product-card');
+            
+            categoryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active de todos
+                    categoryItems.forEach(cat => cat.classList.remove('active'));
+                    // Adiciona active no clicado
+                    this.classList.add('active');
+                    
+                    // Pega a categoria selecionada
+                    const selectedCategory = this.getAttribute('data-category');
+                    
+                    // Filtra os produtos
+                    productCards.forEach(card => {
+                        const productCategory = card.getAttribute('data-category');
+                        
+                        if (selectedCategory === 'all' || productCategory === selectedCategory) {
+                            card.style.display = 'block';
+                            // Animação de entrada
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'scale(1)';
+                            }, 10);
+                        } else {
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.8)';
+                            setTimeout(() => {
+                                card.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
