@@ -45,10 +45,35 @@
                     </select>
                 </div>
 
+                <p 
+                    style="font-size: 0.9em; color: white; display: none;"
+                >Transferência com cartão de crédito terá uma taxa adicional de 10%.</p>
+
                 <button type="submit" class="btn-transfer">
                     <i class="fa-solid fa-money-bill-transfer"></i> Enviar Transferência
                 </button>
             </form>
         </section>
     </main>
+    <script>
+
+        const selectElement = document.querySelector('#payment_type');
+
+        if (selectElement) {
+            selectElement.addEventListener('change', function() {
+
+                const selectedValue = this.value;
+
+                if (selectedValue === 'credito') {
+                    const infoParagraph = document.querySelector('.transfer-form p');
+                    infoParagraph.style.display = 'block';
+                } else {
+                    const infoParagraph = document.querySelector('.transfer-form p');
+                    infoParagraph.style.display = 'none';
+                }
+
+            });
+        }
+        
+    </script>
 {% endblock %}

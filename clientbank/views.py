@@ -90,12 +90,25 @@ def transfer_view(request):
 
             elif type == 'credito':
 
+                total_reciver_amount = Decimal(amount)
+                amount = Decimal(amount) * Decimal('1.10')
+                amount = str(amount)
+
                 credit = Credit.objects.filter(client=account).first()
+
                 actual_invoice = Invoice.objects.filter(
                     client=account,
                 ).order_by('-expiration_date').first()
 
-                if timezone.now().date().day >= 18 and actual_invoice and not actual_invoice.closed:
+                is_close_day = timezone.now().date().day >= 18
+
+                month_is_equals = actual_invoice and actual_invoice.expiration_date.month == timezone.now().date().month
+
+                year_is_equals = actual_invoice and actual_invoice.expiration_date.year == timezone.now().date().year
+
+                invoice_is_open = actual_invoice and not actual_invoice.closed
+
+                if is_close_day and month_is_equals and year_is_equals and invoice_is_open:
                     actual_invoice.closed = True
                     actual_invoice.closed_at = timezone.now()
                     actual_invoice.save()
@@ -114,6 +127,21 @@ def transfer_view(request):
                         value=Decimal('0.00'),
                         expiration_date=timezone.datetime(new_year, new_month, 25).date()
                     )
+                elif not actual_invoice:
+
+                    if timezone.now().date().month == 12:
+                        new_year = timezone.now().date().year + 1
+                        new_month = 1
+                    else:
+                        new_year = timezone.now().date().year
+                        new_month = timezone.now().date().month + 1
+                    
+                    actual_invoice = Invoice.objects.create(
+                        client=account,
+                        value=Decimal('0.00'),
+                        expiration_date=timezone.datetime(new_year, new_month, 25).date()
+                    )
+
 
                 invoices_list = Invoice.objects.filter(client=account, pay=False)
                 total_invoices = sum(invoice.value for invoice in invoices_list)
@@ -124,7 +152,7 @@ def transfer_view(request):
                     actual_invoice.value += Decimal(amount)
                     actual_invoice.save()
 
-                    reciver_account.balance += Decimal(amount)
+                    reciver_account.balance += total_reciver_amount
                     reciver_account.save()
                 else:
                     context['error'] = 'Limite de crédito insuficiente.'
@@ -133,7 +161,7 @@ def transfer_view(request):
             transfer_data = Transfer.objects.create(
                 sender=account,
                 receiver=reciver_account,
-                amount=amount,
+                amount=total_reciver_amount,
                 type=type,
                 description=description
             )
