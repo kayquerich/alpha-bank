@@ -1,0 +1,383 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaPay Store - Sua Loja Online</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h1>AlphaPay<span>Store</span></h1>
+            </div>
+
+            <!-- Barra de Pesquisa -->
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar produtos, marcas e muito mais...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Cart e User -->
+            <div class="header-actions">
+                <button class="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">3</span>
+                </button>
+                <button class="user-btn">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CATEGORIAS -->
+    <section class="categories-section">
+        <div class="categories-container">
+            <div class="category-item active">
+                <div class="category-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <span>Destaques</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-laptop"></i>
+                </div>
+                <span>Eletrônicos</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <span>Moda</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span>Casa</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <span>Esportes</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <span>Livros</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <span>Games</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <span>Alimentos</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-palette"></i>
+                </div>
+                <span>Arte</span>
+            </div>
+            <div class="category-item">
+                <div class="category-icon">
+                    <i class="fas fa-baby"></i>
+                </div>
+                <span>Bebês</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUTOS -->
+    <main class="products-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Produtos em Destaque</h2>
+                <p>Encontre os melhores produtos com os melhores preços</p>
+            </div>
+
+            <div class="products-grid">
+                <!-- Produto 1 -->
+                <div class="product-card">
+                    <div class="product-badge">-20%</div>
+                    <div class="product-image">
+                        <i class="fas fa-laptop fa-4x"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Notebook Gamer Pro X</h3>
+                        <p class="product-description">Intel Core i7, 16GB RAM, RTX 3060</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(245)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-old">R$ 6.999,00</span>
+                            <span class="price-current">R$ 5.599,00</span>
+                        </div>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produto 2 -->
+                <div class="product-card">
+                    <div class="product-badge new">Novo</div>
+                    <div class="product-image">
+                        <i class="fas fa-headphones fa-4x"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Fone Bluetooth Premium</h3>
+                        <p class="product-description">Cancelamento de ruído, 30h bateria</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(512)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-current">R$ 899,00</span>
+                        </div>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produto 3 -->
+                <div class="product-card">
+                    <div class="product-badge">-15%</div>
+                    <div class="product-image">
+                        <i class="fas fa-mobile-alt fa-4x"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Smartphone Ultra 5G</h3>
+                        <p class="product-description">128GB, Câmera 48MP, Tela AMOLED</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(189)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-old">R$ 2.999,00</span>
+                            <span class="price-current">R$ 2.549,00</span>
+                        </div>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produto 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-camera fa-4x"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Câmera DSLR Profissional</h3>
+                        <p class="product-description">24.2MP, 4K Video, WiFi</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(326)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-current">R$ 4.299,00</span>
+                        </div>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produto 5 -->
+                <div class="product-card">
+                    <div class="product-badge">-30%</div>
+                    <div class="product-image">
+                        <i class="fas fa-watch fa-4x"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Smartwatch Fitness Pro</h3>
+                        <p class="product-description">Monitor cardíaco, GPS integrado</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(678)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-old">R$ 1.299,00</span>
+                            <span class="price-current">R$ 909,00</span>
+                        </div>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produto 6 -->
+                <div class="product-card">
+                    <div class="product-badge new">Novo</div>
+                    <div class="product-image">
+                        <i class="fas fa-tablet-alt fa-4x"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Tablet Ultra Slim</h3>
+                        <p class="product-description">10.5", 256GB, Caneta inclusa</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(156)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-current">R$ 2.199,00</span>
+                        </div>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produto 7 -->
+                <div class="product-card">
+                    <div class="product-badge">-25%</div>
+                    <div class="product-image">
+                        <i class="fas fa-keyboard fa-4x"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Teclado Mecânico RGB</h3>
+                        <p class="product-description">Switch Blue, Iluminação customizável</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(423)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-old">R$ 599,00</span>
+                            <span class="price-current">R$ 449,00</span>
+                        </div>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Produto 8 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-mouse fa-4x"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Mouse Gamer Wireless</h3>
+                        <p class="product-description">16.000 DPI, 8 botões programáveis</p>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(891)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-current">R$ 299,00</span>
+                        </div>
+                        <button class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AlphaPay Store</h3>
+                    <p>Sua loja online com os melhores produtos e preços.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Atendimento</h4>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Trocas e Devoluções</a></li>
+                        <li><a href="#">Fale Conosco</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Institucional</h4>
+                    <ul>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Trabalhe Conosco</a></li>
+                        <li><a href="#">Políticas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 AlphaPay Store. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
