@@ -78,6 +78,14 @@
                         <span>Meu Crédito</span>
                     </a>
                 </li>
+                <li>
+                    <a href="#">
+                        <span class="button-symbol" >
+                            <i class="fa-solid fa-cart-shopping" ></i>
+                        </span>
+                        <span>Alpha Shop</span>
+                    </a>
+                </li>
             </ul>
         </nav>
 
@@ -100,7 +108,7 @@
                         <td class="{% if transaction.amount < 0 %}negative{% else %}positive{% endif %}">
                             R$ {{ transaction.amount }}
                         </td>
-                        <td>pix</td>
+                        <td>{{ transaction.type }}</td>
                     </tr>
                     {% empty %}
                     <tr><td colspan="4">Nenhuma transação recente.</td></tr>
