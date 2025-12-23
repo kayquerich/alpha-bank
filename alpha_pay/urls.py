@@ -25,4 +25,5 @@ urlpatterns = [
     path('update-client/', update_client_view, name='update_client'),
     path('assistant/', assistant_view, name='assistant'),
     path('ecommerce/', home_view, name='ecommerce_home'),
+    path('ecommerce/product/<int:product_id>/', product_detail_view, name='product_detail'),
 ]

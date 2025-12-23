@@ -149,7 +149,8 @@
 
             <div class="products-grid">
                 {% for product in products %}
-                <div class="product-card" data-category="{{ product.category }}">
+
+                <a class="product-card" href="{% url 'product_detail' product.id %}" data-category="{{ product.category }}">
                     {% if product.discount_percentage and product.discount_percentage > 0 %}
                     <div class="product-badge">-{{ product.discount_percentage|floatformat:0 }}%</div>
                     {% endif %}
@@ -186,7 +187,8 @@
                             <span class="price-current">R$ {{ product.price|floatformat:2 }}</span>
                         </div>
                     </div>
-                </div>
+                </a>
+
                 {% empty %}
                 <div class="no-products">
                     <p>Nenhum produto disponível no momento.</p>

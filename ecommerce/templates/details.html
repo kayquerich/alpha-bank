@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - AlphaPay Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'styles/details.css' %}">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="{% url 'ecommerce_home' %}" class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h1>AlphaShop<span>Store</span></h1>
+            </a>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <button class="back-btn" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button class="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">3</span>
+                </button>
+                <button class="menu-btn" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-btn" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="sidebar-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Voltar ao Banco</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Minhas Compras</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Carrinho</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-heart"></i>
+                <span>Favoritos</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- PRODUCT DETAILS -->
+    <main class="product-details-section">
+        <div class="container">
+            <div class="product-details">
+                <!-- Product Image -->
+                <div class="product-image-section">
+                    <div class="main-image">
+                        {% if product.image_url %}
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                        {% else %}
+                        <div class="no-image">
+                            <i class="fas fa-box fa-5x"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if product.discount_percentage and product.discount_percentage > 0 %}
+                    <div class="discount-badge">
+                        <span>-{{ product.discount_percentage|floatformat:0 }}%</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info-section">
+                    <div class="product-category">
+                        <i class="fas fa-tag"></i>
+                        {{ product.category }}
+                    </div>
+
+                    <h1 class="product-name">{{ product.name }}</h1>
+
+                    {% if product.average_rating %}
+                    <div class="product-rating">
+                        {% with rating=product.average_rating|floatformat:0|add:"0" %}
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= rating %}
+                                <i class="fas fa-star"></i>
+                                {% else %}
+                                <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        {% endwith %}
+                        <span class="rating-value">{{ product.average_rating|floatformat:1 }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="product-price-section">
+                        {% if product.old_price %}
+                        <div class="old-price">
+                            De: R$ {{ product.old_price|floatformat:2 }}
+                        </div>
+                        {% endif %}
+                        <div class="current-price">
+                            <span class="price-label">Por:</span>
+                            <span class="price-value">R$ {{ product.price|floatformat:2 }}</span>
+                        </div>
+                        {% if product.old_price and product.discount_percentage %}
+                        <div class="savings">
+                            Economize {{ product.discount_percentage|floatformat:0 }}% na compra
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-add-cart-inline">
+                            <i class="fas fa-shopping-cart"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                        <button class="btn-buy-now-inline">
+                            <i class="fas fa-bolt"></i>
+                            Comprar Agora
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description Section Below -->
+            <div class="product-description-wrapper">
+                <div class="product-description">
+                    <h2>Descrição do Produto</h2>
+                    <p>{{ product.description|linebreaks }}</p>
+                </div>
+
+                <div class="product-details-info">
+                    <h3>Informações</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-box"></i>
+                            <div>
+                                <span class="info-label">Categoria</span>
+                                <span class="info-value">{{ product.category }}</span>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <div>
+                                <span class="info-label">Adicionado em</span>
+                                <span class="info-value">{{ product.created_at|date:"d/m/Y" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Menu Sidebar
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeMenu = document.getElementById('closeMenu');
+
+        menuToggle.addEventListener('click', function() {
+            sidebarMenu.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

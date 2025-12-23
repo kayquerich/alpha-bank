@@ -14,3 +14,10 @@ def home_view(request):
     }
 
     return render(request, 'home.html', context)
+
+@login_required(login_url='login')
+def product_detail_view(request, product_id):
+
+    product = Product.objects.get(id=product_id)
+
+    return render(request, 'details.html', { 'product': product })

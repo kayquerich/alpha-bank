@@ -407,6 +407,7 @@ body {
     position: relative;
     overflow: hidden;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .product-card::before {
