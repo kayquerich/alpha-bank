@@ -45,6 +45,7 @@ body {
     cursor: pointer;
     transition: transform 0.3s ease;
     text-decoration: none;
+    color: inherit;
 }
 
 .logo-container:hover {
@@ -100,6 +101,7 @@ body {
     justify-content: center;
     transition: all 0.3s ease;
     font-size: 1.2rem;
+    text-decoration: none;
 }
 
 .back-btn:hover,
@@ -227,6 +229,38 @@ body {
 .sidebar-link span {
     font-size: 1rem;
     font-weight: 500;
+}
+
+/* ==================== MESSAGES ==================== */
+.messages-container {
+    margin-bottom: 2rem;
+}
+
+.alert {
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    color: #4ade80;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: slideDown 0.3s ease;
+}
+
+.alert i {
+    font-size: 1.2rem;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ==================== PRODUCT DETAILS ==================== */
@@ -379,6 +413,11 @@ body {
     padding-top: 1.5rem;
 }
 
+.action-buttons form {
+    flex: 1;
+    display: flex;
+}
+
 .btn-add-cart-inline,
 .btn-buy-now-inline {
     flex: 1;
@@ -393,6 +432,7 @@ body {
     justify-content: center;
     gap: 0.75rem;
     transition: all 0.3s ease;
+    width: 100%;
 }
 
 .btn-add-cart-inline {

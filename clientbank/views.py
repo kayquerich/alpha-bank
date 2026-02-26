@@ -80,6 +80,9 @@ def transfer_view(request):
         print(f'Receiver: {reciver_account}, Amount: {amount}, Description: {description}')
 
         if reciver_account and amount and Decimal(amount) > 0 and account.balance >= Decimal(amount):
+            # Define o valor que o recebedor vai receber (sem acréscimos)
+            total_reciver_amount = Decimal(amount)
+            
             if type == 'saldo':
 
                 account.balance -= Decimal(amount)
@@ -90,7 +93,7 @@ def transfer_view(request):
 
             elif type == 'credito':
 
-                total_reciver_amount = Decimal(amount)
+                # Para crédito, o remetente paga 10% a mais (amount recebe o acréscimo)
                 amount = Decimal(amount) * Decimal('1.10')
                 amount = str(amount)
 

@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Compras - AlphaShop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/my_orders.css' %}">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="{% url 'home' %}" class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h1>Alpha<span>Shop</span></h1>
+            </a>
+
+            <!-- Barra de Pesquisa -->
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar produtos, marcas e muito mais...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Cart e User -->
+            <div class="header-actions">
+                <a href="{% url 'cart' %}" class="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+                <button class="menu-btn" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-btn" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="sidebar-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Voltar ao Banco</span>
+            </a>
+            <a href="{% url 'my_orders' %}" class="sidebar-link active">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Minhas Compras</span>
+            </a>
+            <a href="{% url 'cart' %}" class="sidebar-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Carrinho</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-heart"></i>
+                <span>Favoritos</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Messages -->
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="page-title">
+                <i class="fas fa-shopping-bag"></i>
+                <h2>Minhas Compras</h2>
+            </div>
+
+            {% if orders %}
+            <div class="orders-list">
+                {% for order in orders %}
+                <div class="order-card">
+                    <!-- Header -->
+                    <div class="order-header">
+                        <div class="order-left">
+                            <div class="order-number-badge">
+                                <i class="fas fa-receipt"></i>
+                                <span>#{{ order.order_number }}</span>
+                            </div>
+                            <div class="order-date-info">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>{{ order.created_at|date:"d/m/Y" }}</span>
+                                <span class="time">{{ order.created_at|date:"H:i" }}</span>
+                            </div>
+                        </div>
+                        <div class="order-status status-{{ order.status }}">
+                            <i class="fas fa-circle"></i>
+                            <span>{{ order.get_status_display }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Items Preview -->
+                    <div class="order-items-section">
+                        <div class="items-preview-grid">
+                            {% for item in order.items.all|slice:":4" %}
+                            <div class="item-preview-card">
+                                <div class="item-image-wrapper">
+                                    {% if item.product.image_url %}
+                                    <img src="{{ item.product.image_url }}" alt="{{ item.product_name }}">
+                                    {% else %}
+                                    <div class="no-image-placeholder">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="item-qty-badge">{{ item.quantity }}x</div>
+                            </div>
+                            {% endfor %}
+                            {% if order.items.count > 4 %}
+                            <div class="more-items-card">
+                                <i class="fas fa-plus"></i>
+                                <span>{{ order.items.count|add:"-4" }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Order Info -->
+                    <div class="order-footer">
+                        <div class="order-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-boxes"></i>
+                                <div class="stat-content">
+                                    <span class="stat-label">Itens</span>
+                                    <span class="stat-value">{{ order.get_items_count }}</span>
+                                </div>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item">
+                                <i class="fas fa-dollar-sign"></i>
+                                <div class="stat-content">
+                                    <span class="stat-label">Total</span>
+                                    <span class="stat-value total-price">R$ {{ order.total_amount|floatformat:2 }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{% url 'order_detail' order.id %}" class="view-details-btn">
+                            <span>Ver Detalhes</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- EMPTY STATE -->
+            <div class="empty-orders">
+                <div class="empty-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h3>Você ainda não fez nenhuma compra</h3>
+                <p>Explore nossos produtos e faça seu primeiro pedido</p>
+                <a href="{% url 'home' %}" class="start-shopping-btn">
+                    <i class="fas fa-store"></i>
+                    Começar a Comprar
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <script>
+        // Sidebar Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        menuToggle.addEventListener('click', function() {
+            sidebarMenu.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

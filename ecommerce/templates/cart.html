@@ -1,0 +1,425 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras - AlphaShop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'styles/cart.css' %}">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="{% url 'home' %}" class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h1>Alpha<span>Shop</span></h1>
+            </a>
+
+            <!-- Barra de Pesquisa -->
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar produtos, marcas e muito mais...">
+                <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Cart Button -->
+            <div class="header-actions">
+                <a href="{% url 'cart' %}" class="cart-btn active">
+                    <i class="fas fa-shopping-cart"></i>
+                    {% if items_count > 0 %}
+                    <span class="cart-count">{{ items_count }}</span>
+                    {% endif %}
+                </a>
+                <button class="menu-btn" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-btn" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="sidebar-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Voltar ao Banco</span>
+            </a>
+            <a href="{% url 'my_orders' %}" class="sidebar-link">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Minhas Compras</span>
+            </a>
+            <a href="{% url 'cart' %}" class="sidebar-link active">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Carrinho</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-heart"></i>
+                <span>Favoritos</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Messages -->
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="cart-title">
+                <i class="fas fa-shopping-cart"></i>
+                <h2>Meu Carrinho</h2>
+            </div>
+
+            {% if items_count > 0 %}
+            <div class="cart-layout">
+                <!-- CART ITEMS -->
+                <div class="cart-items-section">
+                    {% for item in cart_items %}
+                    <div class="cart-item-card" data-item-id="{{ item.id }}">
+                        <div class="item-image">
+                            {% if item.product.image_url %}
+                            <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
+                            {% else %}
+                            <div class="no-image">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="item-info">
+                            <h3 class="item-name">{{ item.product.name }}</h3>
+                            <p class="item-category">{{ item.product.category }}</p>
+                            
+                            <div class="item-price-section">
+                                <div class="price-info">
+                                    <span class="current-price">R$ {{ item.product.price }}</span>
+                                    {% if item.product.old_price %}
+                                    <span class="old-price">R$ {{ item.product.old_price }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item-actions">
+                            <div class="quantity-control">
+                                <button class="qty-btn qty-decrease" data-item-id="{{ item.id }}">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="qty-value">{{ item.quantity }}</span>
+                                <button class="qty-btn qty-increase" data-item-id="{{ item.id }}">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+
+                            <div class="item-subtotal">
+                                <span class="subtotal-label">Subtotal:</span>
+                                <span class="subtotal-value">R$ {{ item.get_subtotal }}</span>
+                            </div>
+
+                            <button class="remove-btn" data-item-id="{{ item.id }}">
+                                <i class="fas fa-trash"></i>
+                                Remover
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- ORDER SUMMARY -->
+                <div class="order-summary">
+                    <div class="summary-card">
+                        <h3 class="summary-title">Resumo do Pedido</h3>
+                        
+                        <div class="summary-row">
+                            <span>Subtotal ({{ items_count }} {% if items_count == 1 %}item{% else %}itens{% endif %})</span>
+                            <span>R$ {{ total }}</span>
+                        </div>
+                        
+                        <div class="summary-row">
+                            <span>Frete</span>
+                            <span class="free-shipping">Grátis</span>
+                        </div>
+                        
+                        <div class="summary-divider"></div>
+                        
+                        <div class="summary-row total-row">
+                            <span>Total</span>
+                            <span class="total-price">R$ {{ total }}</span>
+                        </div>
+
+                        <a href="{% url 'checkout_page' %}" class="checkout-btn">
+                            <i class="fas fa-lock"></i>
+                            Finalizar Compra
+                        </a>
+
+                        <a href="{% url 'home' %}" class="continue-shopping">
+                            <i class="fas fa-arrow-left"></i>
+                            Continuar Comprando
+                        </a>
+                    </div>
+
+                    <div class="security-info">
+                        <div class="security-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Compra 100% segura</span>
+                        </div>
+                        <div class="security-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Frete grátis</span>
+                        </div>
+                        <div class="security-item">
+                            <i class="fas fa-undo"></i>
+                            <span>7 dias para devoluções</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <!-- EMPTY CART -->
+            <div class="empty-cart">
+                <div class="empty-cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3>Seu carrinho está vazio</h3>
+                <p>Adicione produtos e eles aparecerão aqui</p>
+                <a href="{% url 'home' %}" class="start-shopping-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Começar a Comprar
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <script>
+        // Sidebar Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        menuToggle.addEventListener('click', function() {
+            sidebarMenu.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        // Função para obter CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        // Função para formatar valores em reais
+        function formatMoney(value) {
+            return parseFloat(value).toFixed(2).replace('.', ',');
+        }
+
+        // Aumentar quantidade
+        document.querySelectorAll('.qty-increase').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemId = this.dataset.itemId;
+                const card = document.querySelector(`[data-item-id="${itemId}"]`);
+                
+                fetch(`/ecommerce/cart/increase/${itemId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Atualiza a quantidade
+                        card.querySelector('.qty-value').textContent = data.quantity;
+                        
+                        // Atualiza o subtotal
+                        card.querySelector('.subtotal-value').textContent = `R$ ${formatMoney(data.subtotal)}`;
+                        
+                        // Atualiza o total do carrinho
+                        document.querySelector('.total-price').textContent = `R$ ${formatMoney(data.total)}`;
+                        document.querySelectorAll('.summary-row span')[1].textContent = `R$ ${formatMoney(data.total)}`;
+                        
+                        // Atualiza contador do header
+                        const cartCount = document.querySelector('.cart-count');
+                        if (cartCount) {
+                            cartCount.textContent = data.items_count;
+                        }
+                    }
+                })
+                .catch(error => console.error('Erro:', error));
+            });
+        });
+
+        // Diminuir quantidade
+        document.querySelectorAll('.qty-decrease').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemId = this.dataset.itemId;
+                const card = document.querySelector(`[data-item-id="${itemId}"]`);
+                
+                fetch(`/ecommerce/cart/decrease/${itemId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.removed) {
+                            // Remove o card com animação
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateX(-20px)';
+                            setTimeout(() => {
+                                card.remove();
+                                
+                                // Se não houver mais itens, recarrega a página
+                                if (data.items_count === 0) {
+                                    location.reload();
+                                }
+                            }, 300);
+                        } else {
+                            // Atualiza a quantidade
+                            card.querySelector('.qty-value').textContent = data.quantity;
+                            
+                            // Atualiza o subtotal
+                            card.querySelector('.subtotal-value').textContent = `R$ ${formatMoney(data.subtotal)}`;
+                        }
+                        
+                        // Atualiza o total do carrinho
+                        document.querySelector('.total-price').textContent = `R$ ${formatMoney(data.total)}`;
+                        document.querySelectorAll('.summary-row span')[1].textContent = `R$ ${formatMoney(data.total)}`;
+                        
+                        // Atualiza contador do header
+                        const cartCount = document.querySelector('.cart-count');
+                        if (data.items_count > 0) {
+                            if (cartCount) {
+                                cartCount.textContent = data.items_count;
+                            }
+                        } else {
+                            if (cartCount) {
+                                cartCount.remove();
+                            }
+                        }
+                        
+                        // Atualiza contagem de itens no resumo
+                        const itemText = data.items_count === 1 ? 'item' : 'itens';
+                        document.querySelector('.summary-row span').textContent = `Subtotal (${data.items_count} ${itemText})`;
+                    }
+                })
+                .catch(error => console.error('Erro:', error));
+            });
+        });
+
+        // Remover item
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const itemId = this.dataset.itemId;
+                const card = document.querySelector(`[data-item-id="${itemId}"]`);
+                
+                if (!confirm('Deseja realmente remover este item do carrinho?')) {
+                    return;
+                }
+                
+                fetch(`/ecommerce/cart/remove/${itemId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Remove o card com animação
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateX(-20px)';
+                        setTimeout(() => {
+                            card.remove();
+                            
+                            // Se não houver mais itens, recarrega a página
+                            if (data.items_count === 0) {
+                                location.reload();
+                            }
+                        }, 300);
+                        
+                        // Atualiza o total do carrinho
+                        document.querySelector('.total-price').textContent = `R$ ${formatMoney(data.total)}`;
+                        document.querySelectorAll('.summary-row span')[1].textContent = `R$ ${formatMoney(data.total)}`;
+                        
+                        // Atualiza contador do header
+                        const cartCount = document.querySelector('.cart-count');
+                        if (data.items_count > 0) {
+                            if (cartCount) {
+                                cartCount.textContent = data.items_count;
+                            }
+                        } else {
+                            if (cartCount) {
+                                cartCount.remove();
+                            }
+                        }
+                        
+                        // Atualiza contagem de itens no resumo
+                        const itemText = data.items_count === 1 ? 'item' : 'itens';
+                        document.querySelector('.summary-row span').textContent = `Subtotal (${data.items_count} ${itemText})`;
+                    }
+                })
+                .catch(error => console.error('Erro:', error));
+            });
+        });
+
+        document.querySelector('.checkout-btn')?.addEventListener('click', function() {
+            console.log('Proceed to checkout');
+            // TODO: Implementar checkout
+        });
+    </script>
+</body>
+</html>

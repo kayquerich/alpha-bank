@@ -1,0 +1,350 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - AlphaShop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/checkout.css' %}">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="{% url 'home' %}" class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h1>Alpha<span>Shop</span></h1>
+            </a>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <a href="{% url 'cart' %}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <button class="menu-btn" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-btn" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="sidebar-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Voltar ao Banco</span>
+            </a>
+            <a href="{% url 'my_orders' %}" class="sidebar-link">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Minhas Compras</span>
+            </a>
+            <a href="{% url 'cart' %}" class="sidebar-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Carrinho</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-heart"></i>
+                <span>Favoritos</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Messages -->
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Page Title -->
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h2>Finalizar Compra</h2>
+                </div>
+                <div class="breadcrumb">
+                    <a href="{% url 'cart' %}">Carrinho</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Checkout</span>
+                </div>
+            </div>
+
+            <form method="POST" action="{% url 'checkout' %}" class="checkout-form" id="checkoutForm">
+                {% csrf_token %}
+                
+                <div class="checkout-layout">
+                    <!-- LEFT COLUMN -->
+                    <div class="checkout-left">
+                        <!-- Delivery Address Section -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <h3>Endereço de Entrega</h3>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="delivery_address">
+                                        <i class="fas fa-road"></i>
+                                        Rua/Avenida
+                                    </label>
+                                    <input type="text" id="delivery_address" name="delivery_address" 
+                                           placeholder="Ex: Rua das Flores" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="delivery_number">
+                                        <i class="fas fa-hashtag"></i>
+                                        Número
+                                    </label>
+                                    <input type="text" id="delivery_number" name="delivery_number" 
+                                           placeholder="123" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="delivery_complement">
+                                        <i class="fas fa-home"></i>
+                                        Complemento
+                                    </label>
+                                    <input type="text" id="delivery_complement" name="delivery_complement" 
+                                           placeholder="Apto 45">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="delivery_city">
+                                        <i class="fas fa-city"></i>
+                                        Cidade
+                                    </label>
+                                    <input type="text" id="delivery_city" name="delivery_city" 
+                                           placeholder="São Paulo" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="delivery_state">
+                                        <i class="fas fa-map"></i>
+                                        Estado
+                                    </label>
+                                    <select id="delivery_state" name="delivery_state" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="AC">Acre</option>
+                                        <option value="AL">Alagoas</option>
+                                        <option value="AP">Amapá</option>
+                                        <option value="AM">Amazonas</option>
+                                        <option value="BA">Bahia</option>
+                                        <option value="CE">Ceará</option>
+                                        <option value="DF">Distrito Federal</option>
+                                        <option value="ES">Espírito Santo</option>
+                                        <option value="GO">Goiás</option>
+                                        <option value="MA">Maranhão</option>
+                                        <option value="MT">Mato Grosso</option>
+                                        <option value="MS">Mato Grosso do Sul</option>
+                                        <option value="MG">Minas Gerais</option>
+                                        <option value="PA">Pará</option>
+                                        <option value="PB">Paraíba</option>
+                                        <option value="PR">Paraná</option>
+                                        <option value="PE">Pernambuco</option>
+                                        <option value="PI">Piauí</option>
+                                        <option value="RJ">Rio de Janeiro</option>
+                                        <option value="RN">Rio Grande do Norte</option>
+                                        <option value="RS">Rio Grande do Sul</option>
+                                        <option value="RO">Rondônia</option>
+                                        <option value="RR">Roraima</option>
+                                        <option value="SC">Santa Catarina</option>
+                                        <option value="SP">São Paulo</option>
+                                        <option value="SE">Sergipe</option>
+                                        <option value="TO">Tocantins</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="delivery_zipcode">
+                                        <i class="fas fa-mail-bulk"></i>
+                                        CEP
+                                    </label>
+                                    <input type="text" id="delivery_zipcode" name="delivery_zipcode" 
+                                           placeholder="00000-000" maxlength="9" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Summary Section -->
+                        <div class="section-card">
+                            <div class="section-header">
+                                <i class="fas fa-box"></i>
+                                <h3>Resumo do Pedido</h3>
+                            </div>
+                            <div class="order-items-list">
+                                {% for item in cart_items %}
+                                <div class="order-item">
+                                    <div class="item-image">
+                                        {% if item.product.image_url %}
+                                        <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
+                                        {% else %}
+                                        <div class="no-image">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="item-details">
+                                        <h4>{{ item.product.name }}</h4>
+                                        <p class="item-qty">Quantidade: {{ item.quantity }}x</p>
+                                    </div>
+                                    <div class="item-price">
+                                        <span>R$ {{ item.get_subtotal|floatformat:2 }}</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="checkout-right">
+                        <!-- Balance Card -->
+                        <div class="balance-card">
+                            <div class="balance-header">
+                                <i class="fas fa-wallet"></i>
+                                <h3>Saldo da Conta</h3>
+                            </div>
+                            <div class="balance-info">
+                                <div class="balance-item">
+                                    <span class="label">Saldo Atual</span>
+                                    <span class="value current">R$ {{ saldo_atual|floatformat:2 }}</span>
+                                </div>
+                                <div class="balance-divider">
+                                    <i class="fas fa-minus"></i>
+                                </div>
+                                <div class="balance-item">
+                                    <span class="label">Valor da Compra</span>
+                                    <span class="value charge">- R$ {{ total|floatformat:2 }}</span>
+                                </div>
+                                <div class="balance-divider">
+                                    <i class="fas fa-equals"></i>
+                                </div>
+                                <div class="balance-item final">
+                                    <span class="label">Saldo Final</span>
+                                    <span class="value {% if saldo_suficiente %}positive{% else %}negative{% endif %}">
+                                        R$ {{ saldo_apos_compra|floatformat:2 }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            {% if not saldo_suficiente %}
+                            <div class="insufficient-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>Saldo insuficiente para completar a compra</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Payment Summary -->
+                        <div class="payment-summary-card">
+                            <div class="summary-row">
+                                <span>Subtotal ({{ items_count }} itens)</span>
+                                <span>R$ {{ total|floatformat:2 }}</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Frete</span>
+                                <span class="free">Grátis</span>
+                            </div>
+                            <div class="summary-divider"></div>
+                            <div class="summary-row total">
+                                <span>Total</span>
+                                <span>R$ {{ total|floatformat:2 }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            {% if saldo_suficiente %}
+                            <button type="submit" class="btn-confirm">
+                                <i class="fas fa-lock"></i>
+                                <span>Confirmar Compra</span>
+                            </button>
+                            {% else %}
+                            <button type="button" class="btn-confirm disabled" disabled>
+                                <i class="fas fa-ban"></i>
+                                <span>Saldo Insuficiente</span>
+                            </button>
+                            {% endif %}
+                            
+                            <a href="{% url 'cart' %}" class="btn-back">
+                                <i class="fas fa-arrow-left"></i>
+                                <span>Voltar ao Carrinho</span>
+                            </a>
+                        </div>
+
+                        <!-- Security Info -->
+                        <div class="security-info">
+                            <div class="security-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Compra 100% segura</span>
+                            </div>
+                            <div class="security-item">
+                                <i class="fas fa-lock"></i>
+                                <span>Dados protegidos</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Sidebar Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        menuToggle.addEventListener('click', function() {
+            sidebarMenu.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        // CEP Mask
+        const zipcodeInput = document.getElementById('delivery_zipcode');
+        zipcodeInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 5) {
+                value = value.slice(0, 5) + '-' + value.slice(5, 8);
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>

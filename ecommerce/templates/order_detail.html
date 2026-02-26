@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido #{{ order.order_number }} - AlphaShop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/order_detail.css' %}">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="{% url 'home' %}" class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h1>Alpha<span>Shop</span></h1>
+            </a>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <a href="{% url 'my_orders' %}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <a href="{% url 'cart' %}" class="cart-btn">
+                    <i class="fas fa-shopping-cart"></i>
+                </a>
+                <button class="menu-btn" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-btn" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{% url 'dashboard' %}" class="sidebar-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>Voltar ao Banco</span>
+            </a>
+            <a href="{% url 'my_orders' %}" class="sidebar-link active">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Minhas Compras</span>
+            </a>
+            <a href="{% url 'cart' %}" class="sidebar-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Carrinho</span>
+            </a>
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-heart"></i>
+                <span>Favoritos</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Messages -->
+            {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="page-title">
+                <i class="fas fa-file-invoice"></i>
+                <h2>Detalhes do Pedido</h2>
+            </div>
+
+            <div class="order-detail-layout">
+                <!-- ORDER INFO -->
+                <div class="order-info-card">
+                    <div class="info-header">
+                        <h3>Pedido #{{ order.order_number }}</h3>
+                        <div class="order-status status-{{ order.status }}">
+                            <i class="fas fa-circle"></i>
+                            {{ order.get_status_display }}
+                        </div>
+                    </div>
+                    
+                    <div class="info-details">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar"></i>
+                            <div>
+                                <span class="detail-label">Data do pedido</span>
+                                <span class="detail-value">{{ order.created_at|date:"d/m/Y às H:i" }}</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-box"></i>
+                            <div>
+                                <span class="detail-label">Total de itens</span>
+                                <span class="detail-value">{{ order.get_items_count }} {% if order.get_items_count == 1 %}item{% else %}itens{% endif %}</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <div>
+                                <span class="detail-label">Valor total</span>
+                                <span class="detail-value total-amount">R$ {{ order.total_amount|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ORDER ITEMS -->
+                <div class="order-items-card">
+                    <h3>Itens do Pedido</h3>
+                    
+                    <div class="items-list">
+                        {% for item in order_items %}
+                        <div class="order-item">
+                            <div class="item-image">
+                                {% if item.product.image_url %}
+                                <img src="{{ item.product.image_url }}" alt="{{ item.product_name }}">
+                                {% else %}
+                                <div class="no-image">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="item-info">
+                                <h4>{{ item.product_name }}</h4>
+                                <p class="item-quantity">Quantidade: {{ item.quantity }}</p>
+                                <p class="item-price">R$ {{ item.product_price|floatformat:2 }} <span class="unit">cada</span></p>
+                            </div>
+                            
+                            <div class="item-subtotal">
+                                <span class="subtotal-label">Subtotal</span>
+                                <span class="subtotal-value">R$ {{ item.get_subtotal|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="order-total">
+                        <span>Total do Pedido</span>
+                        <span class="total-value">R$ {{ order.total_amount|floatformat:2 }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{% url 'my_orders' %}" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar para Minhas Compras
+                </a>
+                <a href="{% url 'home' %}" class="btn-primary">
+                    <i class="fas fa-store"></i>
+                    Continuar Comprando
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sidebar Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        menuToggle.addEventListener('click', function() {
+            sidebarMenu.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', function() {
+            sidebarMenu.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

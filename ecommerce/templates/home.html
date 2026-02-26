@@ -16,12 +16,12 @@
     <header class="header">
         <div class="header-container">
             <!-- Logo -->
-            <div class="logo-container">
+            <a href="{% url 'home' %}" class="logo-container">
                 <div class="logo-icon">
                     <i class="fas fa-credit-card"></i>
                 </div>
                 <h1>Alpha<span>Shop</span></h1>
-            </div>
+            </a>
 
             <!-- Barra de Pesquisa -->
             <div class="search-bar">
@@ -33,10 +33,12 @@
 
             <!-- Cart e User -->
             <div class="header-actions">
-                <button class="cart-btn">
+                <a href="{% url 'cart' %}" class="cart-btn">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">3</span>
-                </button>
+                    {% if items_count > 0 %}
+                    <span class="cart-count">{{ items_count }}</span>
+                    {% endif %}
+                </a>
                 <button class="menu-btn" id="menuToggle">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -58,11 +60,11 @@
                 <i class="fas fa-arrow-left"></i>
                 <span>Voltar ao Banco</span>
             </a>
-            <a href="#" class="sidebar-link">
+            <a href="{% url 'my_orders' %}" class="sidebar-link">
                 <i class="fas fa-shopping-bag"></i>
                 <span>Minhas Compras</span>
             </a>
-            <a href="#" class="sidebar-link">
+            <a href="{% url 'cart' %}" class="sidebar-link">
                 <i class="fas fa-shopping-cart"></i>
                 <span>Carrinho</span>
             </a>
